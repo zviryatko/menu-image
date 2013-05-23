@@ -13,8 +13,8 @@ Adds a field to load the image in a menu item and displays the image inside the 
 
 1. Upload `menu-image` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Go to /wp-admin/nav-menus.php
-4. Edit exist menu item and upload image or add new menu item and save menu before uploading image
+3. Go to `/wp-admin/nav-menus.php`
+4. Edit exist menu item or add new menu item and just upload image than click `Save Menu`
 5. See your menu on site
 
 == Frequently Asked Questions ==
@@ -34,5 +34,5 @@ Just register another image size in your theme with function `add_image_size()`.
 
 == Screenshots ==
 
-1. screenshot-1.png
-2. screenshot-2.png
+1. Admin screen
+2. Menu preview in standart twenty-twelve theme

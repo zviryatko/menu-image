@@ -37,7 +37,7 @@ function menu_image_init() {
 add_action('init', 'menu_image_init');
 
 function menu_image_nav_menu_manage_columns($columns) {
-	return $columns + array('image' => __('Image'));
+	return $columns + array('image' => __('Image', 'menu-image'));
 }
 
 add_filter('manage_nav-menus_columns', 'menu_image_nav_menu_manage_columns', 11);
@@ -208,13 +208,13 @@ class Menu_Image_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit {
 			<p class="field-image description description-wide">
 				<?php if (!has_post_thumbnail($item_id)) : ?>
 					<label for="edit-menu-item-image-<?php echo $item_id; ?>">
-						<?php _e('Image'); ?><br/>
+						<?php _e('Image', 'menu-image'); ?><br/>
 						<input type="file" name="menu-item-image_<?php echo $item_id; ?>" id="edit-menu-item-image-<?php echo $item_id; ?>"/>
 					</label>
 				<?php else: ?>
 					<?php print get_the_post_thumbnail($item_id, $image_size); ?><br/>
 					<?php $sizes = get_intermediate_image_sizes(); ?>
-					<label><?php _e("Size"); ?>
+					<label><?php _e("Size", 'menu-image'); ?>
 						<select name="menu_item_image_size[<?php echo $item_id; ?>]">
 							<?php foreach ($sizes as $size) : ?>
 								<?php $selected = ($image_size == $size) ? ' selected="selected"' : ''; ?>
@@ -223,7 +223,7 @@ class Menu_Image_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit {
 						</select>
 					</label>
 					<br />
-					<label><?php _e("Remove image"); ?> <input type="checkbox" name="menu_item_remove_image[<?php echo $item_id; ?>]"/></label>
+					<label><?php _e("Remove image", 'menu-image'); ?> <input type="checkbox" name="menu_item_remove_image[<?php echo $item_id; ?>]"/></label>
 				<?php endif; ?>
 			</p>
 			<p class="field-xfn description description-thin">
