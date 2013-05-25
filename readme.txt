@@ -3,7 +3,7 @@ Contributors: zviryatko
 Tags: menu, image, field
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,9 @@ Just register another image size in your theme with function `add_image_size()`.
 2. Menu preview in standard twenty-twelve theme
 
 == Changelog ==
+
+= 1.2 =
+* Fix styles for hovered image
 
 = 1.1 =
 * Added style file with vertical align of menu image item by default
