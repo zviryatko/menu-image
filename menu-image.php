@@ -332,7 +332,7 @@ function menu_image_nav_menu_item_filter($item_output, $item, $depth, $args) {
       $width    = $hover_image_src[1];
       $height   = $hover_image_src[2];
       $style   .= " style='width: {$width}px; height: {$height}px;'";
-      $attributes .= " style='line-height: {$width}px'";
+      $attributes .= " style='line-height: {$height}px'";
     }
     $image    = "<span class='menu-image-hover-wrapper menu-image-wrapper-id-{$item->ID}' $style>";
     $image   .= get_the_post_thumbnail($item->ID, $image_size, 'class=menu-image');
