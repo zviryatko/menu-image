@@ -62,7 +62,7 @@ function menu_image_save_post_action($post_id, $post) {
       }
     }
     if (!empty($_FILES["menu-item-image_$post_id-hovered"])) {
-      $attachment_id = media_handle_upload("menu-item-image_$post_id-hovered", $post_id);
+      media_handle_upload("menu-item-image_$post_id-hovered", $post_id);
     }
 	}
 	if (isset($_POST['menu_item_remove_image'][$post_id]) && !empty($_POST['menu_item_remove_image'][$post_id])) {
@@ -323,20 +323,20 @@ function menu_image_nav_menu_item_filter($item_output, $item, $depth, $args) {
     'numberposts' => 1,
     'exclude'     => get_post_thumbnail_id($item->ID),
   );
-  $images     = get_posts($args);
-  if ($images) {
-    global $_wp_additional_image_sizes;
+  $hovered_image  = reset(get_posts($args));
+  if ($hovered_image) {
+    $hover_image_src = wp_get_attachment_image_src($hovered_image->ID, $image_size);
     $attributes .= ' class="menu-image-hovered"';
     $style      = '';
-    if (isset($_wp_additional_image_sizes[$image_size])) {
-      $width    = $_wp_additional_image_sizes[$image_size]['width'];
-      $height   = $_wp_additional_image_sizes[$image_size]['height'];
+    if (isset($hover_image_src[1]) && isset($hover_image_src[1])) {
+      $width    = $hover_image_src[1];
+      $height   = $hover_image_src[2];
       $style   .= " style='width: {$width}px; height: {$height}px;'";
       $attributes .= " style='line-height: {$width}px'";
     }
     $image    = "<span class='menu-image-hover-wrapper menu-image-wrapper-id-{$item->ID}' $style>";
     $image   .= get_the_post_thumbnail($item->ID, $image_size, 'class=menu-image');
-    $image   .= wp_get_attachment_image( reset($images)->ID, $image_size, FALSE, 'class=hovered-image' );
+    $image   .= wp_get_attachment_image( $hovered_image->ID, $image_size, FALSE, 'class=hovered-image' );
     $image   .= '</span>';
   } else {
 	  $image    = get_the_post_thumbnail($item->ID, $image_size, 'class=menu-image');
