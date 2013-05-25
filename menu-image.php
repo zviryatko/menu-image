@@ -32,6 +32,9 @@ Author URI: http://makeyoulivebetter.org.ua/
 
 function menu_image_init() {
 	add_post_type_support('nav_menu_item', array('thumbnail'));
+  add_image_size('menu-24x24', 24, 24);
+  add_image_size('menu-36x36', 36, 36);
+  add_image_size('menu-48x48', 48, 48);
 }
 
 add_action('init', 'menu_image_init');
@@ -47,20 +50,31 @@ function menu_image_save_post_action($post_id, $post) {
 		update_post_meta($post_id, '_menu_item_image_size', esc_sql($_POST['menu_item_image_size'][$post_id]));
 	}
 
-	if (!empty($_FILES["menu-item-image_$post_id"])) {
+	if (!empty($_FILES["menu-item-image_$post_id"]) || !empty($_FILES["menu-item-image_$post_id-hovered"])) {
 		require_once(ABSPATH . "wp-admin" . '/includes/image.php');
 		require_once(ABSPATH . "wp-admin" . '/includes/file.php');
 		require_once(ABSPATH . "wp-admin" . '/includes/media.php');
 
-		$attachment_id = media_handle_upload("menu-item-image_$post_id", $post_id);
-		if ($attachment_id) {
-			set_post_thumbnail($post, $attachment_id);
-		}
+    if (!empty($_FILES["menu-item-image_$post_id"])) {
+      $attachment_id = media_handle_upload("menu-item-image_$post_id", $post_id);
+      if ($attachment_id) {
+        set_post_thumbnail($post, $attachment_id);
+      }
+    }
+    if (!empty($_FILES["menu-item-image_$post_id-hovered"])) {
+      $attachment_id = media_handle_upload("menu-item-image_$post_id-hovered", $post_id);
+    }
 	}
-	elseif (isset($_POST['menu_item_remove_image'][$post_id]) && !empty($_POST['menu_item_remove_image'][$post_id])) {
-		$attachment_id = get_post_thumbnail_id($post_id);
-		delete_post_thumbnail($attachment_id);
-		wp_delete_attachment($attachment_id);
+	if (isset($_POST['menu_item_remove_image'][$post_id]) && !empty($_POST['menu_item_remove_image'][$post_id])) {
+    $args = array(
+      'post_type' => 'attachment',
+      'post_status' => null,
+      'post_parent' => $post_id,
+    );
+    $attachments = get_posts($args);
+    if ($attachments)
+      foreach($attachments as $attachment)
+        wp_delete_attachment($attachment->ID);
 		delete_post_meta('_menu_item_image_size', $post_id);
 	}
 }
@@ -127,6 +141,15 @@ class Menu_Image_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit {
 		$title = empty($item->label) ? $title : $item->label;
 
 		$image_size = get_post_meta($item_id, '_menu_item_image_size', TRUE);
+    // second image
+    $args = array(
+      'post_type' => 'attachment',
+      'numberposts' => 1,
+      'post_status' => null,
+      'post_parent' => $item_id,
+      'exclude' => get_post_thumbnail_id($item_id),
+    );
+    $hovered = reset(get_posts($args));
 		?>
 	<li id="menu-item-<?php echo $item_id; ?>" class="<?php echo implode(' ', $classes); ?>">
 		<dl class="menu-item-bar">
@@ -212,18 +235,29 @@ class Menu_Image_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit {
 						<input type="file" name="menu-item-image_<?php echo $item_id; ?>" id="edit-menu-item-image-<?php echo $item_id; ?>"/>
 					</label>
 				<?php else: ?>
-					<?php print get_the_post_thumbnail($item_id, $image_size); ?><br/>
+					<?php print get_the_post_thumbnail($item_id, $image_size); ?>
 					<?php $sizes = get_intermediate_image_sizes(); ?>
-					<label><?php _e("Size", 'menu-image'); ?>
-						<select name="menu_item_image_size[<?php echo $item_id; ?>]">
-							<?php foreach ($sizes as $size) : ?>
-								<?php $selected = ($image_size == $size) ? ' selected="selected"' : ''; ?>
-								<option value="<?php echo $size; ?>"<?php echo $selected; ?>><?php echo ucfirst($size); ?></option>
-							<?php endforeach; ?>
-						</select>
-					</label>
-					<br />
-					<label><?php _e("Remove image", 'menu-image'); ?> <input type="checkbox" name="menu_item_remove_image[<?php echo $item_id; ?>]"/></label>
+          <?php if (!empty($hovered)) : ?>
+            <?php print wp_get_attachment_image( $hovered->ID, $image_size ); ?>
+          <?php else : ?>
+            <br />
+            <br />
+            <label><?php _e("Add on hover image"); ?><input type="checkbox" onchange="var file = jQuery('#menu-image-hovered-<?php echo $item_id; ?>'); if(this.checked) { file.show() } else { file.hide() }"/></label>
+            <input id="menu-image-hovered-<?php echo $item_id; ?>" type="file" name="menu-item-image_<?php echo $item_id; ?>-hovered" style="display: none; padding-left: 10px;"/>
+          <?php endif; ?>
+          <br />
+          <br />
+          <label><?php _e("Size", 'menu-image'); ?>
+            <select name="menu_item_image_size[<?php echo $item_id; ?>]">
+              <?php foreach ($sizes as $size) : ?>
+                <?php $selected = ($image_size == $size) ? ' selected="selected"' : ''; ?>
+                <option value="<?php echo $size; ?>"<?php echo $selected; ?>><?php echo ucfirst($size); ?></option>
+              <?php endforeach; ?>
+            </select>
+          </label>
+          <br />
+          <br />
+          <label><?php _e("Remove both images", 'menu-image'); ?> <input type="checkbox" name="menu_item_remove_image[<?php echo $item_id; ?>]"/></label>
 				<?php endif; ?>
 			</p>
 			<p class="field-xfn description description-thin">
@@ -283,7 +317,30 @@ function menu_image_nav_menu_item_filter($item_output, $item, $depth, $args) {
 	$attributes .= !empty($item->url) ? ' href="' . esc_attr($item->url) . '"' : '';
 
 	$image_size = get_post_meta($item->ID, '_menu_item_image_size', TRUE);
-	$image      = get_the_post_thumbnail($item->ID, $image_size);
+  $args       = array(
+    'post_parent' => $item->ID,
+    'post_type'   => 'attachment',
+    'numberposts' => 1,
+    'exclude'     => get_post_thumbnail_id($item->ID),
+  );
+  $images     = get_posts($args);
+  if ($images) {
+    global $_wp_additional_image_sizes;
+    $attributes .= ' class="menu-image-hovered"';
+    $style      = '';
+    if (isset($_wp_additional_image_sizes[$image_size])) {
+      $width    = $_wp_additional_image_sizes[$image_size]['width'];
+      $height   = $_wp_additional_image_sizes[$image_size]['height'];
+      $style   .= " style='width: {$width}px; height: {$height}px;'";
+      $attributes .= " style='line-height: {$width}px'";
+    }
+    $image    = "<span class='menu-image-hover-wrapper menu-image-wrapper-id-{$item->ID}' $style>";
+    $image   .= get_the_post_thumbnail($item->ID, $image_size, 'class=menu-image');
+    $image   .= wp_get_attachment_image( reset($images)->ID, $image_size, FALSE, 'class=hovered-image' );
+    $image   .= '</span>';
+  } else {
+	  $image    = get_the_post_thumbnail($item->ID, $image_size, 'class=menu-image');
+  }
 
 	$item_output = $args->before;
 	$item_output .= '<a' . $attributes . '>';
@@ -294,3 +351,14 @@ function menu_image_nav_menu_item_filter($item_output, $item, $depth, $args) {
 }
 
 add_filter('walker_nav_menu_start_el', 'menu_image_nav_menu_item_filter', 10, 4);
+
+function menu_image_add_inline_style_action() {
+  wp_register_style( 'menu-image',
+    plugins_url('', __FILE__) . '/menu-image.css',
+    array(),
+    '1.1',
+    'all' );
+  wp_enqueue_style( 'menu-image' );
+}
+
+add_action( 'wp_enqueue_scripts', 'menu_image_add_inline_style_action' );
