@@ -43,4 +43,4 @@ Just register another image size in your theme with function `add_image_size()`.
 == Upgrade Notice ==
 
 = 1.1 =
-Now you can upload image thar replaced default on mouse hover
+Now you can upload image that replaced default on mouse hover

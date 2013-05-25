@@ -1,9 +1,9 @@
-.menu-item.menu-item-type-custom a img.menu-image {
+.menu-item a img.menu-image {
     border: none;
     box-shadow: none;
     vertical-align: middle;
 }
-.menu-item.menu-item-type-custom a img.menu-image,
+.menu-item a img.menu-image,
 .menu-image-hover-wrapper {
     margin: 0;
     padding: 0 10px 0 0;
