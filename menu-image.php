@@ -7,10 +7,10 @@
 
 /*
 Plugin Name: Menu Image
-Plugin URI: http://html-and-cms.com/portfolio/menu-image/
+Plugin URI: http://html-and-cms.com/plugins/menu-image/
 Description: Provide uploading images to menu item
 Author: Alex Davyskiba aka Zviryatko
-Version: 1.0
+Version: 1.1
 Author URI: http://makeyoulivebetter.org.ua/
 */
 
