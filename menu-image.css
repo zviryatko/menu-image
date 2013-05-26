@@ -1,21 +1,33 @@
-.menu-item a img.menu-image {
+.menu-item a img {
     border: none;
     box-shadow: none;
     vertical-align: middle;
 }
 .menu-item a img.menu-image,
-.menu-image-hover-wrapper {
+.menu-item a .menu-image-hover-wrapper {
     margin: 0;
     padding: 0 10px 0 0;
 }
-.menu-image-hover-wrapper {
+.menu-item a .menu-image-hover-wrapper {
     display: block;
     overflow: hidden;
 }
-.menu-image-hover-wrapper,
-.menu-image-hover-wrapper img {
+.menu-item a .menu-image-hover-wrapper,
+.menu-item a .menu-image-hover-wrapper img {
     float: left;
 }
-a.menu-image-hovered:hover .menu-image-hover-wrapper img.menu-image {
+.menu-item a.menu-image-hovered:hover .menu-image-hover-wrapper img.menu-image {
     display: none !important;
+}
+.menu-item a .menu-image-hover-wrapper.menu-image-show-after {
+    float: none;
+    display: inline-block;
+    vertical-align: bottom;
+}
+.menu-item a img.menu-image-after,
+.menu-item a .menu-image-hover-wrapper.menu-image-show-after {
+    padding: 0 0 0 10px;
+}
+.menu-item a .menu-image-hover-wrapper.menu-image-show-after img.menu-image-after {
+    padding: 0;
 }

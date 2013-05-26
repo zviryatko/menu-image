@@ -30,6 +30,8 @@ Author URI: http://makeyoulivebetter.org.ua/
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+// todo: replace title position checkbox to radios: before | none | right.
+
 function menu_image_init() {
 	add_post_type_support('nav_menu_item', array('thumbnail'));
   add_image_size('menu-24x24', 24, 24);
@@ -46,9 +48,12 @@ function menu_image_nav_menu_manage_columns($columns) {
 add_filter('manage_nav-menus_columns', 'menu_image_nav_menu_manage_columns', 11);
 
 function menu_image_save_post_action($post_id, $post) {
-	if (isset($_POST['menu_item_image_size'][$post_id]) && !empty($_POST['menu_item_image_size'][$post_id])) {
-		update_post_meta($post_id, '_menu_item_image_size', esc_sql($_POST['menu_item_image_size'][$post_id]));
-	}
+  $menu_image_settings = array('menu_item_image_size', 'menu-item-image-show-after');
+  foreach ($menu_image_settings as $setting_name) {
+    if (isset($_POST[$setting_name][$post_id]) && !empty($_POST[$setting_name][$post_id])) {
+      update_post_meta($post_id, "_$setting_name", esc_sql($_POST[$setting_name][$post_id]));
+    }
+  }
 
 	if (!empty($_FILES["menu-item-image_$post_id"]) || !empty($_FILES["menu-item-image_$post_id-hovered"])) {
 		require_once(ABSPATH . "wp-admin" . '/includes/image.php');
@@ -140,7 +145,9 @@ class Menu_Image_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit {
 
 		$title = empty($item->label) ? $title : $item->label;
 
-		$image_size = get_post_meta($item_id, '_menu_item_image_size', TRUE);
+    $item_image_size = get_post_meta($item_id, '_menu_item_image_size', TRUE);
+    $image_size = empty($item_image_size) ? 'menu-36x36' : $item_image_size;
+    $show_after = get_post_meta($item->ID, '_menu-item-image-show-after', TRUE);
     // second image
     $args = array(
       'post_type' => 'attachment',
@@ -257,6 +264,10 @@ class Menu_Image_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit {
           </label>
           <br />
           <br />
+          <?php $checked = ($show_after) ? ' checked="checked"' : ''; ?>
+          <label><?php _e("After title"); ?><input type="checkbox" name="menu-item-image-show-after[<?php echo $item_id; ?>]"<?php echo $checked; ?> /></label>
+          <br />
+          <br />
           <label><?php _e("Remove both images", 'menu-image'); ?> <input type="checkbox" name="menu_item_remove_image[<?php echo $item_id; ?>]"/></label>
 				<?php endif; ?>
 			</p>
@@ -317,6 +328,8 @@ function menu_image_nav_menu_item_filter($item_output, $item, $depth, $args) {
 	$attributes .= !empty($item->url) ? ' href="' . esc_attr($item->url) . '"' : '';
 
 	$image_size = get_post_meta($item->ID, '_menu_item_image_size', TRUE);
+	$show_after = get_post_meta($item->ID, '_menu-item-image-show-after', TRUE);
+  $classes = ($show_after) ? ' menu-image-after' : '';
   $args       = array(
     'post_parent' => $item->ID,
     'post_type'   => 'attachment',
@@ -334,17 +347,19 @@ function menu_image_nav_menu_item_filter($item_output, $item, $depth, $args) {
       $style   .= " style='width: {$width}px; height: {$height}px;'";
       $attributes .= " style='line-height: {$height}px'";
     }
-    $image    = "<span class='menu-image-hover-wrapper menu-image-wrapper-id-{$item->ID}' $style>";
-    $image   .= get_the_post_thumbnail($item->ID, $image_size, 'class=menu-image');
-    $image   .= wp_get_attachment_image( $hovered_image->ID, $image_size, FALSE, 'class=hovered-image' );
+    $wrap_class = ($show_after) ? ' menu-image-show-after' : '';
+    $image    = "<span class='menu-image-hover-wrapper menu-image-wrapper-id-{$item->ID}{$wrap_class}' $style>";
+    $image   .= get_the_post_thumbnail($item->ID, $image_size, "class=menu-image{$classes}");
+    $image   .= wp_get_attachment_image( $hovered_image->ID, $image_size, FALSE, "class=hovered-image{$classes}" );
     $image   .= '</span>';
   } else {
-	  $image    = get_the_post_thumbnail($item->ID, $image_size, 'class=menu-image');
+	  $image    = get_the_post_thumbnail($item->ID, $image_size, "class=menu-image{$classes}");
   }
 
 	$item_output = $args->before;
 	$item_output .= '<a' . $attributes . '>';
-	$item_output .= $image . $args->link_before . apply_filters('the_title', $item->title, $item->ID) . $args->link_after;
+	$link         = $args->link_before . apply_filters('the_title', $item->title, $item->ID) . $args->link_after;
+  $item_output .= ($show_after) ? $link . $image : $image . $link;
 	$item_output .= '</a>';
 	$item_output .= $args->after;
 	return $item_output;
