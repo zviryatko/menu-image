@@ -3,7 +3,7 @@ Contributors: zviryatko
 Tags: menu, image, field
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 1.2
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,9 @@ Just register another image size in your theme with function `add_image_size()`.
 
 == Changelog ==
 
+= 1.3 =
+* Added ability to set title position, an example: before, after image or hide
+
 = 1.2 =
 * Fix styles for hovered image
 
@@ -44,6 +47,9 @@ Just register another image size in your theme with function `add_image_size()`.
 * Added default image sizes for menu items: 24x24, 36x36 and 48x48
 
 == Upgrade Notice ==
+
+= 1.2 =
+Now you can change title text position
 
 = 1.1 =
 Now you can upload image that replaced default on mouse hover

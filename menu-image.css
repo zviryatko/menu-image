@@ -3,11 +3,6 @@
     box-shadow: none;
     vertical-align: middle;
 }
-.menu-item a img.menu-image,
-.menu-item a .menu-image-hover-wrapper {
-    margin: 0;
-    padding: 0 10px 0 0;
-}
 .menu-item a .menu-image-hover-wrapper {
     display: block;
     overflow: hidden;
@@ -19,15 +14,20 @@
 .menu-item a.menu-image-hovered:hover .menu-image-hover-wrapper img.menu-image {
     display: none !important;
 }
-.menu-item a .menu-image-hover-wrapper.menu-image-show-after {
-    float: none;
+.menu-item a.menu-image-title-hide .menu-image-hover-wrapper,
+.menu-item a.menu-image-title-before .menu-image-hover-wrapper {
+    vertical-align: top;
     display: inline-block;
-    vertical-align: bottom;
+    float: none;
 }
-.menu-item a img.menu-image-after,
-.menu-item a .menu-image-hover-wrapper.menu-image-show-after {
-    padding: 0 0 0 10px;
+.menu-item a.menu-image-title-after img,
+.menu-item a.menu-image-hovered.menu-image-title-after .menu-image-hover-wrapper {
+    padding-right: 10px;
 }
-.menu-item a .menu-image-hover-wrapper.menu-image-show-after img.menu-image-after {
+.menu-item a.menu-image-title-before img,
+.menu-item a.menu-image-hovered.menu-image-title-before .menu-image-hover-wrapper {
+    padding-left: 10px;
+}
+.menu-item a .menu-image-hover-wrapper img {
     padding: 0;
 }
