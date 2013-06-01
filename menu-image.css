@@ -11,8 +11,12 @@
 .menu-item a .menu-image-hover-wrapper img {
     float: left;
 }
+.menu-item a.menu-image-hovered .menu-image-hover-wrapper img.hovered-image,
 .menu-item a.menu-image-hovered:hover .menu-image-hover-wrapper img.menu-image {
-    display: none !important;
+    opacity: 0;
+}
+.menu-item a.menu-image-hovered:hover .menu-image-hover-wrapper img.hovered-image {
+    opacity: 1;
 }
 .menu-item a.menu-image-title-hide .menu-image-hover-wrapper,
 .menu-item a.menu-image-title-before .menu-image-hover-wrapper {
@@ -30,4 +34,6 @@
 }
 .menu-item a .menu-image-hover-wrapper img {
     padding: 0;
+    position: absolute;
+    transition: opacity 0.25s ease-in-out 0s;
 }
