@@ -1,5 +1,6 @@
 === Plugin Name ===
 Contributors: zviryatko
+Donate link: http://makeyoulivebetter.org.ua/buy-beer
 Tags: menu, image, field
 Requires at least: 3.5.1
 Tested up to: 3.5.1
