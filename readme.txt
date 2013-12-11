@@ -1,7 +1,7 @@
 === Plugin Name ===
 Contributors: zviryatko
+Tags: menu, image, field, hover
 Donate link: http://makeyoulivebetter.org.ua/buy-beer
-Tags: menu, image, field
 Requires at least: 3.5.1
 Tested up to: 3.5.1
 Stable tag: 1.3
@@ -9,6 +9,8 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Adds a field to load the image in a menu item and displays the image inside the link in the menu before the text.
+Now you can upload the second image and set to the mouse over/out effect.
+And also change position of title or hide title if need.
 
 == Installation ==
 
