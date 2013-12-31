@@ -52,15 +52,20 @@ class Menu_Image_Plugin {
 	 * Initialization action.
 	 *
 	 * Adding image sizes for most popular menu icon sizes. Adding thumbnail
-	 *  support to menu post type.
-	 * @todo: do anyone need so more sizes?
-	 * Maybe leave only one, as example: 36x36?
+	 * support to menu post type.
 	 */
 	public function menu_image_init() {
 		add_post_type_support( 'nav_menu_item', array( 'thumbnail' ) );
-		add_image_size( 'menu-24x24', 24, 24 );
-		add_image_size( 'menu-36x36', 36, 36 );
-		add_image_size( 'menu-48x48', 48, 48 );
+    $image_sizes = array(
+      'menu-24x24' => array( 24, 24 ),
+      'menu-36x36' => array( 36, 36 ),
+      'menu-48x48' => array( 48, 48 ),
+    );
+    $image_sizes = apply_filters( 'menu-image-sizes', $image_sizes );
+    foreach($image_sizes as $image_size_name => $image_size){
+      error_log("Adding image: ".$image_size[0]." and ".$image_size[1]);
+      add_image_size($image_size_name, $image_size[0], $image_size[1]);
+    }
 	}
 
 	/**
