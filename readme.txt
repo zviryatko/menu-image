@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== Menu Image ===
 Contributors: zviryatko
 Tags: menu, image, field, hover
 Donate link: http://makeyoulivebetter.org.ua/buy-beer
