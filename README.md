@@ -1,5 +1,5 @@
 # Menu Image #
-**Contributors:** @zviryatko  
+**Contributors:** zviryatko  
 **Tags:** menu, image, field, hover  
 **Donate link:** http://makeyoulivebetter.org.ua/buy-beer  
 **Requires at least:** 3.5.1  
@@ -27,17 +27,34 @@ And also change position of title or hide title if need.
 Where you show your menu with function `<?php wp_nav_menu(); ?>` as param you can add `array('link_before' => '<span>', 'link_after' => '</span>')`.
 It makes css markup easier.
 
-### How to add another size for image? ###
+### How to add another size for the image? ###
 
-Just register another image size in your theme with function `add_image_size()`.
+To add a new size (or remove an old one) add a function to the `menu-image-sizes` filter. For example
+
+```
+<?php
+add_filter( 'menu-image-sizes', function($sizes){
+
+  // remove the default 36x36 size
+  unset($sizes['menu-36x36'];
+
+  // add a new size
+  $sizes['menu-50x50'] = array(50,50);
+
+  // return $sizes (required)
+  return $sizes;
+
+});
+?>
+```
 
 ## Screenshots ##
 
-###1. Admin screen###
-![Admin screen](http://s-plugins.wordpress.org/menu-image/assets/screenshot-1.png)
+### 1. Admin screen ###
+![Admin screen](http://s.wordpress.org/extend/plugins/menu-image/screenshot-1.png)
 
-###2. Menu preview in standard twenty-twelve theme###
-![Menu preview in standard twenty-twelve theme](http://s-plugins.wordpress.org/menu-image/assets/screenshot-2.png)
+### 2. Menu preview in standard twenty-twelve theme ###
+![Menu preview in standard twenty-twelve theme](http://s.wordpress.org/extend/plugins/menu-image/screenshot-2.png)
 
 
 ## Changelog ##

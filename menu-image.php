@@ -39,28 +39,32 @@ Author URI: http://makeyoulivebetter.org.ua/
  * @package Menu_Image
  */
 class Menu_Image_Plugin {
-  public function __construct() {
-    add_action('init', array($this, 'menu_image_init'));
-    add_filter('manage_nav-menus_columns', array($this, 'menu_image_nav_menu_manage_columns'), 11);
-    add_action('save_post', array($this, 'menu_image_save_post_action'), 10, 2);
-    add_filter('wp_edit_nav_menu_walker', array($this, 'menu_image_edit_nav_menu_walker_filter'));
-    add_filter('walker_nav_menu_start_el', array($this, 'menu_image_nav_menu_item_filter'), 10, 4);
-    add_action('wp_enqueue_scripts', array($this, 'menu_image_add_inline_style_action'));
-  }
+	public function __construct() {
+		add_action('init', array($this, 'menu_image_init'));
+		add_filter('manage_nav-menus_columns', array($this, 'menu_image_nav_menu_manage_columns'), 11);
+		add_action('save_post', array($this, 'menu_image_save_post_action'), 10, 2);
+		add_filter('wp_edit_nav_menu_walker', array($this, 'menu_image_edit_nav_menu_walker_filter'));
+		add_filter('walker_nav_menu_start_el', array($this, 'menu_image_nav_menu_item_filter'), 10, 4);
+		add_action('wp_enqueue_scripts', array($this, 'menu_image_add_inline_style_action'));
+	}
 
 	/**
 	 * Initialization action.
 	 *
 	 * Adding image sizes for most popular menu icon sizes. Adding thumbnail
-	 *  support to menu post type.
-	 * @todo: do anyone need so more sizes?
-	 * Maybe leave only one, as example: 36x36?
+	 * support to menu post type.
 	 */
 	public function menu_image_init() {
 		add_post_type_support( 'nav_menu_item', array( 'thumbnail' ) );
-		add_image_size( 'menu-24x24', 24, 24 );
-		add_image_size( 'menu-36x36', 36, 36 );
-		add_image_size( 'menu-48x48', 48, 48 );
+		$image_sizes = array(
+			'menu-24x24' => array( 24, 24 ),
+			'menu-36x36' => array( 36, 36 ),
+			'menu-48x48' => array( 48, 48 ),
+		);
+		$image_sizes = apply_filters( 'menu-image-sizes', $image_sizes );
+		foreach($image_sizes as $image_size_name => $image_size){
+			add_image_size($image_size_name, $image_size[0], $image_size[1]);
+		}
 	}
 
 	/**
