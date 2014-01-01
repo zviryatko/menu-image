@@ -27,9 +27,26 @@ And also change position of title or hide title if need.
 Where you show your menu with function `<?php wp_nav_menu(); ?>` as param you can add `array('link_before' => '<span>', 'link_after' => '</span>')`.
 It makes css markup easier.
 
-= How to add another size for image? =
+= How to add another size for the image? =
 
-Just register another image size in your theme with function `add_image_size()`.
+To add a new size (or remove an old one) add a function to the `menu-image-sizes` filter. For example
+
+```
+<?php
+add_filter( 'menu-image-sizes', function($sizes){
+
+  // remove the default 36x36 size
+  unset($sizes['menu-36x36'];
+
+  // add a new size
+  $sizes['menu-50x50'] = array(50,50);
+
+  // return $sizes (required)
+  return $sizes;
+
+});
+?>
+```
 
 == Screenshots ==
 
