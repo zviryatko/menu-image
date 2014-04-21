@@ -163,7 +163,8 @@ class Menu_Image_Plugin {
 			'numberposts' => 1,
 			'exclude'     => get_post_thumbnail_id( $item->ID ),
 		);
-		$hovered_image  = reset( get_posts( $image_args ) );
+		$hovered_images = get_posts( $image_args );
+		$hovered_image  = reset($hovered_images);
 		if ( $hovered_image ) {
 			$hover_image_src = wp_get_attachment_image_src( $hovered_image->ID, $image_size );
 			$attributes_classes .= ' menu-image-hovered';
@@ -285,7 +286,8 @@ class Menu_Image_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit {
 			'exclude'     => get_post_thumbnail_id( $item_id ),
 		);
 
-		$hovered = reset( get_posts( $args ) );
+		$hovered_images = get_posts( $args );
+		$hovered = reset($hovered_images);
 		?>
 		<li id="menu-item-<?php echo $item_id; ?>" class="<?php echo implode(' ', $classes ); ?>">
 			<dl class="menu-item-bar">
