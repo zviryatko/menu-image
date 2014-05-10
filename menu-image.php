@@ -36,24 +36,34 @@ Author URI: http://makeyoulivebetter.org.ua/
  * @package Menu_Image
  */
 class Menu_Image_Plugin {
-	protected $image_sizes = array(
-		'menu-24x24' => array( 24, 24, false ),
-		'menu-36x36' => array( 36, 36, false ),
-		'menu-48x48' => array( 48, 48, false ),
-	);
+  /**
+  * @var array
+  */
+  private $additionalDisplayableImageExtensions = array('ico');
 
-	public function __construct() {
-		add_action( 'init', array( $this, 'menu_image_init' ) );
-		add_filter( 'manage_nav-menus_columns', array( $this, 'menu_image_nav_menu_manage_columns' ), 11 );
-		add_action( 'save_post', array( $this, 'menu_image_save_post_action' ), 10, 2 );
-		add_action( 'admin_head-nav-menus.php', array( $this, 'menu_image_admin_head_nav_menus_action' ) );
-		add_filter( 'wp_edit_nav_menu_walker', array( $this, 'menu_image_edit_nav_menu_walker_filter' ) );
-		add_filter( 'wp_setup_nav_menu_item', array( $this, 'menu_image_wp_setup_nav_menu_item' ) );
-		add_filter( 'walker_nav_menu_start_el', array( $this, 'menu_image_nav_menu_item_filter' ), 10, 4 );
-		add_action( 'wp_enqueue_scripts', array( $this, 'menu_image_add_inline_style_action' ) );
-		add_action( 'admin_action_delete-menu-item-image', array( $this, 'menu_image_delete_menu_item_image_action' ) );
-		add_action( 'wp_ajax_set-menu-item-thumbnail', array( $this, 'wp_ajax_set_menu_item_thumbnail' ) );
-	}
+  public function __construct() {
+    add_action('init', array($this, 'menu_image_init'));
+    add_filter('manage_nav-menus_columns', array($this, 'menu_image_nav_menu_manage_columns'), 11);
+    add_action('save_post', array($this, 'menu_image_save_post_action'), 10, 2);
+    add_filter('wp_edit_nav_menu_walker', array($this, 'menu_image_edit_nav_menu_walker_filter'));
+    add_filter('walker_nav_menu_start_el', array($this, 'menu_image_nav_menu_item_filter'), 10, 4);
+    add_action('wp_enqueue_scripts', array($this, 'menu_image_add_inline_style_action'));
+      // Add support for additional image types
+    add_filter('file_is_displayable_image', array($this, 'file_is_displayable_image'), 10, 2);
+  }
+
+    /**
+     * Filter adds additional validation for image type
+     *
+     * @param bool $result
+     * @param string $path
+     * @return bool
+     */
+    public function file_is_displayable_image($result, $path) {
+        if ($result) { return true; }
+        $fileExtension = strtolower(substr($path, -3));
+        return  in_array($fileExtension, $this->additionalDisplayableImageExtensions);
+    }
 
 	/**
 	 * Initialization action.
