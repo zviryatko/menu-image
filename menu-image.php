@@ -39,6 +39,11 @@ Author URI: http://makeyoulivebetter.org.ua/
  * @package Menu_Image
  */
 class Menu_Image_Plugin {
+  /**
+  * @var array
+  */
+  private $additionalDisplayableImageExtensions = array('ico');
+
   public function __construct() {
     add_action('init', array($this, 'menu_image_init'));
     add_filter('manage_nav-menus_columns', array($this, 'menu_image_nav_menu_manage_columns'), 11);
@@ -46,7 +51,22 @@ class Menu_Image_Plugin {
     add_filter('wp_edit_nav_menu_walker', array($this, 'menu_image_edit_nav_menu_walker_filter'));
     add_filter('walker_nav_menu_start_el', array($this, 'menu_image_nav_menu_item_filter'), 10, 4);
     add_action('wp_enqueue_scripts', array($this, 'menu_image_add_inline_style_action'));
+      // Add support for additional image types
+    add_filter('file_is_displayable_image', array($this, 'file_is_displayable_image'), 10, 2);
   }
+
+    /**
+     * Filter adds additional validation for image type
+     *
+     * @param bool $result
+     * @param string $path
+     * @return bool
+     */
+    public function file_is_displayable_image($result, $path) {
+        if ($result) { return true; }
+        $fileExtension = pathinfo($path, PATHINFO_EXTENSION);
+        return  in_array($fileExtension, $this->additionalDisplayableImageExtensions);
+    }
 
 	/**
 	 * Initialization action.
