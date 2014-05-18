@@ -144,17 +144,26 @@ class Menu_Image_Plugin {
 	 * @return string
 	 */
 	public function menu_image_nav_menu_item_filter( $item_output, $item, $depth, $args ) {
-		$attributes = !empty( $item->attr_title ) ? ' title="' . esc_attr( $item->attr_title ) . '"' : '';
-		$attributes .= !empty( $item->target ) ? ' target="' . esc_attr( $item->target ) . '"' : '';
-		$attributes .= !empty( $item->xfn ) ? ' rel="' . esc_attr( $item->xfn ) . '"' : '';
-		$attributes .= !empty( $item->url ) ? ' href="' . esc_attr( $item->url ) . '"' : '';
+		$attributes = ! empty( $item->attr_title ) ? ' title="' . esc_attr( $item->attr_title ) . '"' : '';
+		$attributes .= ! empty( $item->target ) ? ' target="' . esc_attr( $item->target ) . '"' : '';
+		$attributes .= ! empty( $item->xfn ) ? ' rel="' . esc_attr( $item->xfn ) . '"' : '';
+		$attributes .= ! empty( $item->url ) ? ' href="' . esc_attr( $item->url ) . '"' : '';
 
-		$image_size = $item->image_size ? $item->image_size : apply_filters( 'menu_image_default_size', 'menu-36x36' );
-		$position   = $item->title_position ? $item->title_position : apply_filters( 'menu_image_default_title_position', 'after' );
-		$class      = "menu-image-title-{$position}";
-		if ( $item->thumbnail_hover_id ) {
-			$hover_image_src = wp_get_attachment_image_src( $item->thumbnail_hover_id, $image_size );
-			$style           = '';
+		$image_size     = get_post_meta( $item->ID, '_menu_item_image_size', true );
+		$title_position = get_post_meta( $item->ID, '_menu-item-image-title-position', true );
+		$classes        = $attributes_classes = "menu-image-title-{$title_position}";
+		$image_args     = array(
+			'post_parent' => $item->ID,
+			'post_type'   => 'attachment',
+			'numberposts' => 1,
+			'exclude'     => get_post_thumbnail_id( $item->ID ),
+		);
+    $get_posts = get_posts( $image_args );
+		$hovered_image  = reset( $get_posts );
+		if ( $hovered_image ) {
+			$hover_image_src = wp_get_attachment_image_src( $hovered_image->ID, $image_size );
+			$attributes_classes .= ' menu-image-hovered';
+			$style = '';
 			if ( isset( $hover_image_src[1] ) && isset( $hover_image_src[1] ) ) {
 				$width  = $hover_image_src[1];
 				$height = $hover_image_src[2] + 1; // +1px because span have small inline space..
@@ -419,6 +428,23 @@ class Menu_Image_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit {
 		if ( 0 == $depth )
 			$submenu_text = 'style="display: none;"';
 
+		// Getting menu item images
+		$item_image_size = get_post_meta( $item_id, '_menu_item_image_size', true );
+		$image_size      = empty( $item_image_size ) ? 'menu-36x36' : $item_image_size;
+		$title_position  = get_post_meta( $item->ID, '_menu-item-image-title-position', true );
+		if ( ! $title_position )
+			$title_position = 'after';
+		// ...and hover image
+		$args = array(
+			'post_type'   => 'attachment',
+			'numberposts' => 1,
+			'post_status' => NULL,
+			'post_parent' => $item_id,
+			'exclude'     => get_post_thumbnail_id( $item_id ),
+		);
+
+    $get_posts = get_posts( $args );
+		$hovered = reset( $get_posts );
 		?>
 		<li id="menu-item-<?php echo $item_id; ?>" class="<?php echo implode(' ', $classes ); ?>">
 			<dl class="menu-item-bar">
