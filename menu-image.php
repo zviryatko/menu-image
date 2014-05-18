@@ -61,7 +61,7 @@ class Menu_Image_Plugin {
      */
     public function file_is_displayable_image($result, $path) {
         if ($result) { return true; }
-        $fileExtension = strtolower(substr($path, -3));
+        $fileExtension = pathinfo($path, PATHINFO_EXTENSION);
         return  in_array($fileExtension, $this->additionalDisplayableImageExtensions);
     }
 
