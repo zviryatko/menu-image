@@ -1,0 +1,83 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Menu Image\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-05-17 16:51+0300\n"
+"PO-Revision-Date: 2014-05-17 17:05+0300\n"
+"Last-Translator: Alex Davyskiba <sanya.davyskiba@gmail.com>\n"
+"Language-Team: MakeYouLiveBetter <team@makeyoulivebetter.org.ua>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e;esc_attr__;esc_html__\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../menu-image.php:83
+msgid "Image"
+msgstr "Зображення"
+
+#: ../menu-image.php:211
+msgid "Chose menu image"
+msgstr "Виберіть зображення"
+
+#: ../menu-image.php:252
+msgid "Menu image"
+msgstr "Зображення меню"
+
+#: ../menu-image.php:253
+msgid "Change menu item image"
+msgstr "Змінити картинку для пункту меню"
+
+#: ../menu-image.php:253
+msgid "Set menu item image"
+msgstr "Виберіть зображення для пункту меню"
+
+#: ../menu-image.php:256
+msgid "Set image"
+msgstr "Виберіть зображення"
+
+#: ../menu-image.php:257
+#: ../menu-image.php:267
+#: ../menu-image.php:541
+msgid "Remove"
+msgstr "Видалити"
+
+#: ../menu-image.php:262
+msgid "Image on hover"
+msgstr "Зображення при наведенні"
+
+#: ../menu-image.php:263
+msgid "Change menu item image on hover"
+msgstr "Змінити картинку при наведенні для пункту меню"
+
+#: ../menu-image.php:263
+msgid "Set menu item image on hover"
+msgstr "Вибрати картинку при наведенні для пункту меню"
+
+#: ../menu-image.php:266
+msgid "Set image on hover"
+msgstr "Виберіть зображення"
+
+#: ../menu-image.php:279
+msgid "Image size"
+msgstr "Розмір"
+
+#: ../menu-image.php:294
+msgid "Title position"
+msgstr "Розташування заголовка"
+
+#: ../menu-image.php:297
+msgid "Before"
+msgstr "До"
+
+#: ../menu-image.php:298
+msgid "Hide"
+msgstr "Нема"
+
+#: ../menu-image.php:299
+msgid "After"
+msgstr "Після"
+
