@@ -3,14 +3,15 @@ Contributors: zviryatko
 Tags: menu, image, field, hover
 Donate link: http://makeyoulivebetter.org.ua/buy-beer
 Requires at least: 3.5.1
-Tested up to: 3.5.1
-Stable tag: 1.3
+Tested up to: 3.9.1
+Stable tag: 2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Adds a field to load the image in a menu item and displays the image inside the link in the menu before the text.
 Now you can upload the second image and set to the mouse over/out effect.
 And also change position of title or hide title if need.
+And... load images via media uploader!
 
 == Installation ==
 
@@ -34,9 +35,13 @@ Just register another image size in your theme with function `add_image_size()`.
 == Screenshots ==
 
 1. Admin screen
-2. Menu preview in standard twenty-twelve theme
+2. Menu preview in standard twenty-thirteen theme
 
 == Changelog ==
+
+= 2.0 =
+* Added support of media uploader.
+* Fixed php strict warnings.
 
 = 1.3 =
 * Added ability to set title position, an example: before, after image or hide
@@ -50,6 +55,10 @@ Just register another image size in your theme with function `add_image_size()`.
 * Added default image sizes for menu items: 24x24, 36x36 and 48x48
 
 == Upgrade Notice ==
+
+= 2.0 =
+WARNING! You need to re-select the images! Now, with media uploader support, it's easy peasy.
+Media uploader support. Upload once, use many times!
 
 = 1.2 =
 Now you can change title text position
