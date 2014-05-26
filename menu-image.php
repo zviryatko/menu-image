@@ -173,20 +173,18 @@ class Menu_Image_Plugin {
 		$class      = "menu-image-title-{$position}";
 		if ( $item->thumbnail_hover_id ) {
 			$hover_image_src = wp_get_attachment_image_src( $item->thumbnail_hover_id, $image_size );
-			$style           = '';
-			if ( isset( $hover_image_src[1] ) && isset( $hover_image_src[1] ) ) {
-				$width  = $hover_image_src[1];
-				$height = $hover_image_src[2] + 1; // +1px because span have small inline space..
-				$style .= " style='width: {$width}px; height: {$height}px;'";
-				$attributes .= " style='line-height: {$height}px'";
-			}
-			$image = "<span class='menu-image-hover-wrapper'" . $style . ">";
+			$margin_size = $hover_image_src[1];
+			$image = "<span class='menu-image-hover-wrapper'>";
 			$image .= wp_get_attachment_image( $item->thumbnail_id, $image_size, false, "class=menu-image {$class}" );
-			$image .= wp_get_attachment_image( $item->thumbnail_hover_id, $image_size, false, "class=hovered-image {$class}" );
-			$image .= '</span>';
+			$image .= wp_get_attachment_image( $item->thumbnail_hover_id, $image_size, false, array(
+				'class' => "hovered-image {$class}",
+				'style' => "margin-left: -{$margin_size}px;",
+			));
+			$image .= '</span>';;
 			$class .= ' menu-image-hovered';
 		} else {
 			$image = wp_get_attachment_image( $item->thumbnail_id, $image_size, false, "class=menu-image {$class}" );
+			$class .= ' menu-image-not-hovered';
 		}
 
 		$item_output = "{$args->before}<a{$attributes} class='{$class}'>";
@@ -228,6 +226,7 @@ class Menu_Image_Plugin {
 		wp_localize_script('menu-image-admin', 'menuImage', array(
 			'l10n' => array(
 				'uploaderTitle' => __( 'Chose menu image', 'menu-image' ),
+				'uploaderButtonText' => __( 'Select', 'menu-image' ),
 			),
 			'settings' => array(
 				'nonce' => wp_create_nonce( 'update-menu-item' ),
