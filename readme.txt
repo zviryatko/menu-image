@@ -4,7 +4,7 @@ Tags: menu, image, field, hover
 Donate link: http://makeyoulivebetter.org.ua/buy-beer
 Requires at least: 3.5.1
 Tested up to: 3.9.1
-Stable tag: 2.0
+Stable tag: 2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,6 +42,10 @@ Just register another image size in your theme with function `add_image_size()`.
 2. Menu preview in standard twenty-thirteen theme
 
 == Changelog ==
+
+= 2.1 =
+* Fix http://wordpress.org/support/topic/set-image-button-not-working
+* Fix http://wordpress.org/support/topic/vertical-align-when-using-mouseover-image
 
 = 2.0 =
 * Added support of media uploader.
