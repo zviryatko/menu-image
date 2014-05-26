@@ -12,8 +12,8 @@
 			});
 		};
 
-		$('#menu-to-edit').find('.menu-item')
-			.on('click', '.set-post-thumbnail', function (e) {
+		$('#menu-to-edit')
+			.on('click', '.menu-item .set-post-thumbnail', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
 
@@ -21,14 +21,14 @@
 					is_hover = $(this).hasClass('hover-image'),
 					uploader = wp.media({
 						title: menuImage.l10n.uploaderTitle, // todo: translate
-						button: { text: 'Select' },
+						button: { text: menuImage.l10n.uploaderButtonText },
 						multiple: false
 					}).on('select', function () {
 						var attachment = uploader.state().get('selection').first().toJSON();
 						menuImageUpdate( item_id, attachment.id, is_hover );
 					}).open();
 			})
-			.on('click', '.remove-post-thumbnail', function (e) {
+			.on('click', '.menu-item .remove-post-thumbnail', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
 
