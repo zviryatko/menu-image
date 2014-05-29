@@ -1,10 +1,10 @@
 # Menu Image #
-**Contributors:** @zviryatko  
+**Contributors:** zviryatko  
 **Tags:** menu, image, field, hover  
-**Donate link:** (http://makeyoulivebetter.org.ua/buy-beer)
+**Donate link:** http://makeyoulivebetter.org.ua/buy-beer  
 **Requires at least:** 3.5.1  
-**Tested up to:** 3.9.1
-**Stable tag:** 2.0
+**Tested up to:** 3.9.1  
+**Stable tag:** 2.2  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -32,20 +32,44 @@ And... load images via media uploader!
 Where you show your menu with function `<?php wp_nav_menu(); ?>` as param you can add `array('link_before' => '<span>', 'link_after' => '</span>')`.
 It makes css markup easier.
 
-### How to add another size for image? ###
+### How to add another size for the image? ###
 
-Just register another image size in your theme with function `add_image_size()`.
+To add a new size (or remove an old one) add a function to the `menu_image_default_sizes` filter. For example
+
+```
+<?php
+add_filter( 'menu_image_default_sizes', function($sizes){
+
+  // remove the default 36x36 size
+  unset($sizes['menu-36x36'];
+
+  // add a new size
+  $sizes['menu-50x50'] = array(50,50);
+
+  // return $sizes (required)
+  return $sizes;
+
+});
+?>
+```
 
 ## Screenshots ##
 
-###1. Admin screen###
-![Admin screen](http://s-plugins.wordpress.org/menu-image/assets/screenshot-1.png)
+### 1. Admin screen ###
+![Admin screen](http://ps.w.org/menu-image/assets/screenshot-1.png)
 
-###2. Menu preview in standard twenty-twelve theme###
-![Menu preview in standard twenty-twelve theme](http://s-plugins.wordpress.org/menu-image/assets/screenshot-2.png)
+### 2. Menu preview in standard twenty-thirteen theme ###
+![Menu preview in standard twenty-thirteen theme](http://ps.w.org/menu-image/assets/screenshot-2.png)
 
 
 ## Changelog ##
+
+### 2.2 ###
+* Added grunt-wp-readme-to-markdown npm package for converting readme to markdown for github users.
+
+### 2.1 ###
+* Fix [set-image-button-not-working](http://wordpress.org/support/topic/set-image-button-not-working)
+* Fix [vertical-align-when-using-mouseover-image](ttp://wordpress.org/support/topic/vertical-align-when-using-mouseover-image)
 
 ### 2.0 ###
 * Added support of media uploader.
