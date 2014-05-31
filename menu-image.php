@@ -10,7 +10,7 @@ Plugin Name: Menu Image
 Plugin URI: http://html-and-cms.com/plugins/menu-image/
 Description: Provide uploading images to menu item
 Author: Alex Davyskiba aka Zviryatko
-Version: 2.2
+Version: 2.3
 Author URI: http://makeyoulivebetter.org.ua/
 */
 
@@ -49,7 +49,7 @@ class Menu_Image_Plugin {
 	public function __construct() {
 		add_action( 'init', array( $this, 'menu_image_init' ) );
 		add_filter( 'manage_nav-menus_columns', array( $this, 'menu_image_nav_menu_manage_columns' ), 11 );
-		add_action( 'save_post', array( $this, 'menu_image_save_post_action' ), 10, 2 );
+		add_action( 'save_post_nav_menu_item', array( $this, 'menu_image_save_post_action' ), 10, 3 );
 		add_action( 'admin_head-nav-menus.php', array( $this, 'menu_image_admin_head_nav_menus_action' ) );
 		add_filter( 'wp_edit_nav_menu_walker', array( $this, 'menu_image_edit_nav_menu_walker_filter' ) );
 		add_filter( 'wp_setup_nav_menu_item', array( $this, 'menu_image_wp_setup_nav_menu_item' ) );
@@ -58,7 +58,9 @@ class Menu_Image_Plugin {
 		add_action( 'admin_action_delete-menu-item-image', array( $this, 'menu_image_delete_menu_item_image_action' ) );
 		add_action( 'wp_ajax_set-menu-item-thumbnail', array( $this, 'wp_ajax_set_menu_item_thumbnail' ) );
 		// Add support for additional image types
-		add_filter('file_is_displayable_image', array($this, 'file_is_displayable_image'), 10, 2);
+		add_filter( 'file_is_displayable_image', array( $this, 'file_is_displayable_image' ), 10, 2 );
+		// Add support of WPML menus sync
+		add_action( 'wp_update_nav_menu_item', array( $this, 'wp_update_nav_menu_item_action' ), 10, 2 );
 	}
 
     /**
@@ -117,7 +119,69 @@ class Menu_Image_Plugin {
 		);
 		foreach ( $menu_image_settings as $setting_name ) {
 			if ( isset( $_POST[$setting_name][$post_id] ) && !empty( $_POST[$setting_name][$post_id] ) ) {
-				update_post_meta( $post_id, "_$setting_name", esc_sql( $_POST[$setting_name][$post_id] ) );
+				if ($post->{"_$setting_name"} != $_POST[$setting_name][$post_id]) {
+					update_post_meta( $post_id, "_$setting_name", esc_sql( $_POST[$setting_name][$post_id] ) );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Save item settings while WPML sync menus.
+	 *
+	 * @param $item_menu_id
+	 * @param $menu_item_db_id
+	 */
+	public function wp_update_nav_menu_item_action( $item_menu_id, $menu_item_db_id ) {
+		global $sitepress, $icl_menus_sync;
+		if ( class_exists( 'SitePress' ) && $sitepress instanceof SitePress && class_exists( 'ICLMenusSync' ) && $icl_menus_sync instanceof ICLMenusSync ) {
+			static $run_times = array();
+			$menu_image_settings = array(
+				'menu_item_image_size',
+				'menu_item_image_title_position',
+				'thumbnail_id',
+				'thumbnail_hover_id',
+			);
+
+			// iterate synchronized menus
+			foreach ( $icl_menus_sync->menus as $menu_id => $menu_data ) {
+				if ( !isset( $_POST['sync']['add'][$menu_id] ) ) {
+					continue;
+				}
+
+				// remove cache and get language current item menu
+				$cache_key   = md5( serialize( array( $item_menu_id, 'tax_nav_menu' ) ) );
+				$cache_group = 'get_language_for_element';
+				wp_cache_delete( $cache_key, $cache_group );
+				$lang = $sitepress->get_language_for_element( $item_menu_id, 'tax_nav_menu' );
+
+				if ( !isset( $run_times[$menu_id][$lang] ) ) {
+					$run_times[$menu_id][$lang] = 0;
+				}
+
+				// Count static var for each menu id and saved item language
+				// and get original item id from counted position of synchronized
+				// items from POST data. That's all magic.
+				$post_item_ids = array();
+				foreach ($_POST['sync']['add'][$menu_id] as $id => $lang_array) {
+					if (array_key_exists($lang, $lang_array)) {
+						$post_item_ids[] = $id;
+					}
+				}
+				if ( !array_key_exists( $run_times[$menu_id][$lang], $post_item_ids ) ) {
+					continue;
+				}
+				$orig_item_id = $post_item_ids[$run_times[$menu_id][$lang]];
+
+				// iterate all item settings and save it for new item
+				$orig_item_meta = get_metadata( 'post', $orig_item_id );
+				foreach ( $menu_image_settings as $meta ) {
+					if ( isset( $orig_item_meta["_$meta"] ) && isset( $orig_item_meta["_$meta"][0] ) ) {
+						update_post_meta( $menu_item_db_id, "_$meta", $orig_item_meta["_$meta"][0] );
+					}
+				}
+				$run_times[$menu_id][$lang]++;
+				break;
 			}
 		}
 	}

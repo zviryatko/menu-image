@@ -1,14 +1,15 @@
 # Menu Image #
 **Contributors:** zviryatko  
-**Tags:** menu, image, field, hover  
+**Tags:** menu, image, field, hover, wpml  
 **Donate link:** http://makeyoulivebetter.org.ua/buy-beer  
 **Requires at least:** 3.5.1  
 **Tested up to:** 3.9.1  
-**Stable tag:** 2.2  
+**Stable tag:** 2.3  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
 Adds a field to load the image in a menu item and displays the image inside the link in the menu before the text.
+Now WPML compliant.
 
 ## Description ##
 
@@ -16,6 +17,7 @@ Adds a field to load the image in a menu item and displays the image inside the 
 Now you can upload the second image and set to the mouse over/out effect.
 And also change position of title or hide title if need.
 And... load images via media uploader!
+Now WPML compliant!
 
 ## Installation ##
 
@@ -24,6 +26,7 @@ And... load images via media uploader!
 3. Go to `/wp-admin/nav-menus.php`
 4. Edit exist menu item or add new menu item and just upload image than click `Save Menu`
 5. See your menu on site
+6. (WMPL users only) Goto WPML > WP Menus Sync and click to `Sync`
 
 ## Frequently Asked Questions ##
 
@@ -36,7 +39,7 @@ It makes css markup easier.
 
 To add a new size (or remove an old one) add a function to the `menu_image_default_sizes` filter. For example
 
-```
+`
 <?php
 add_filter( 'menu_image_default_sizes', function($sizes){
 
@@ -51,7 +54,7 @@ add_filter( 'menu_image_default_sizes', function($sizes){
 
 });
 ?>
-```
+`
 
 ## Screenshots ##
 
@@ -63,6 +66,9 @@ add_filter( 'menu_image_default_sizes', function($sizes){
 
 
 ## Changelog ##
+
+### 2.3 ###
+* WPML menus sync support. Thanx @pabois for [feature request](http://wordpress.org/support/topic/very-good-wpml-compliant)
 
 ### 2.2 ###
 * Added grunt-wp-readme-to-markdown npm package for converting readme to markdown for github users.
@@ -88,6 +94,9 @@ add_filter( 'menu_image_default_sizes', function($sizes){
 * Added default image sizes for menu items: 24x24, 36x36 and 48x48
 
 ## Upgrade Notice ##
+
+### 2.3 ###
+If your are using WPML plugin, now when you sync menus, images will synced too.
 
 ### 2.0 ###
 WARNING! You need to re-select the images! Now, with media uploader support, it's easy peasy.
