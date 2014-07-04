@@ -51,7 +51,6 @@ class Menu_Image_Plugin {
 		add_filter( 'manage_nav-menus_columns', array( $this, 'menu_image_nav_menu_manage_columns' ), 11 );
 		add_action( 'save_post_nav_menu_item', array( $this, 'menu_image_save_post_action' ), 10, 3 );
 		add_action( 'admin_head-nav-menus.php', array( $this, 'menu_image_admin_head_nav_menus_action' ) );
-		add_filter( 'wp_edit_nav_menu_walker', array( $this, 'menu_image_edit_nav_menu_walker_filter' ) );
 		add_filter( 'wp_setup_nav_menu_item', array( $this, 'menu_image_wp_setup_nav_menu_item' ) );
 		add_filter( 'walker_nav_menu_start_el', array( $this, 'menu_image_nav_menu_item_filter' ), 10, 4 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'menu_image_add_inline_style_action' ) );
@@ -61,6 +60,18 @@ class Menu_Image_Plugin {
 		add_filter( 'file_is_displayable_image', array( $this, 'file_is_displayable_image' ), 10, 2 );
 		// Add support of WPML menus sync
 		add_action( 'wp_update_nav_menu_item', array( $this, 'wp_update_nav_menu_item_action' ), 10, 2 );
+		add_action( 'admin_init', array( $this, 'admin_init' ), 99 );
+	}
+
+	/**
+	 * Admin init action with lowest execution priority
+	 */
+	public function admin_init() {
+		// Add custom field for menu edit walker
+		if (!has_action('wp_nav_menu_item_custom_fields')) {
+			add_filter( 'wp_edit_nav_menu_walker', array( $this, 'menu_image_edit_nav_menu_walker_filter' ) );
+		}
+		add_action( 'wp_nav_menu_item_custom_fields', array( $this, 'menu_item_custom_fields' ), 10, 1 );
 	}
 
     /**
@@ -325,7 +336,7 @@ class Menu_Image_Plugin {
 	 * @param int $item_id The post ID or object associated with the thumbnail, defaults to global $post.
 	 * @return string html
 	 */
-	static public function wp_post_thumbnail_html( $item_id ) {
+	public function wp_post_thumbnail_html( $item_id ) {
 		$default_size = apply_filters( 'menu_image_default_size', 'menu-36x36' );;
 		$markup       = '<p class="description description-thin" ><label>%s<br /><a title="%s" href="#" class="set-post-thumbnail button%s" data-item-id="%s" style="height: auto;">%s</a>%s</label></p>';
 
@@ -439,11 +450,21 @@ class Menu_Image_Plugin {
 		}
 
 		if ($success) {
-			$return = self::wp_post_thumbnail_html( $post_ID );
+			$return = $this->wp_post_thumbnail_html( $post_ID );
 			$json ? wp_send_json_success( $return ) : wp_die( $return );
 		}
 
 		wp_die( 0 );
+	}
+
+	/**
+	 * Add custom fields to menu item as suggest to http://shazdeh.me/2014/06/25/custom-fields-nav-menu-items/
+	 */
+	public function menu_item_custom_fields( $item_id ) { ?>
+		<div class="field-image hide-if-no-js wp-media-buttons">
+		<?php echo $this->wp_post_thumbnail_html( $item_id) ?>
+		</div>
+	<?php
 	}
 }
 
@@ -581,9 +602,12 @@ class Menu_Image_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit {
 						<input type="text" id="edit-menu-item-xfn-<?php echo $item_id; ?>" class="widefat code edit-menu-item-xfn" name="menu-item-xfn[<?php echo $item_id; ?>]" value="<?php echo esc_attr( $item->xfn ); ?>" />
 					</label>
 				</p>
-				<div class="field-image hide-if-no-js wp-media-buttons">
-					<?php echo Menu_Image_Plugin::wp_post_thumbnail_html( $item_id) ?>
-				</div>
+
+				<?php
+				// This is the added section
+				do_action( 'wp_nav_menu_item_custom_fields', $item_id, $item, $depth, $args );
+				// end added section
+				?>
 
 				<p class="field-description description description-wide">
 					<label for="edit-menu-item-description-<?php echo $item_id; ?>">
