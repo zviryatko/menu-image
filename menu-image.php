@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Menu_Image
- * @version 2.0
+ * @version 2.4
  * @licence GPLv2
  */
 
@@ -10,7 +10,7 @@ Plugin Name: Menu Image
 Plugin URI: http://html-and-cms.com/plugins/menu-image/
 Description: Provide uploading images to menu item
 Author: Alex Davyskiba aka Zviryatko
-Version: 2.3
+Version: 2.4
 Author URI: http://makeyoulivebetter.org.ua/
 */
 
@@ -42,6 +42,14 @@ class Menu_Image_Plugin {
 		'menu-48x48' => array( 48, 48, false ),
 	);
 	/**
+	 * List of used attachment ids grouped by size.
+	 *
+	 * Need to list all ids to prevent Jetpack Phonon in image_downsize filter.
+	 *
+	 * @var array
+	 */
+	private $used_attachments = array();
+	/**
 	 * @var array
 	 */
 	private $additionalDisplayableImageExtensions = array('ico');
@@ -61,6 +69,7 @@ class Menu_Image_Plugin {
 		// Add support of WPML menus sync
 		add_action( 'wp_update_nav_menu_item', array( $this, 'wp_update_nav_menu_item_action' ), 10, 2 );
 		add_action( 'admin_init', array( $this, 'admin_init' ), 99 );
+		add_filter( 'jetpack_photon_override_image_downsize', array( $this, 'jetpack_photon_override_image_downsize_filter' ), 10, 2 );
 	}
 
 	/**
@@ -246,7 +255,9 @@ class Menu_Image_Plugin {
 		$image_size = $item->image_size ? $item->image_size : apply_filters( 'menu_image_default_size', 'menu-36x36' );
 		$position   = $item->title_position ? $item->title_position : apply_filters( 'menu_image_default_title_position', 'after' );
 		$class      = "menu-image-title-{$position}";
+		$this->setUsedAttachments($image_size, $item->thumbnail_id);
 		if ( $item->thumbnail_hover_id ) {
+			$this->setUsedAttachments($image_size, $item->thumbnail_hover_id);
 			$hover_image_src = wp_get_attachment_image_src( $item->thumbnail_hover_id, $image_size );
 			$margin_size = $hover_image_src[1];
 			$image = "<span class='menu-image-hover-wrapper'>";
@@ -465,6 +476,40 @@ class Menu_Image_Plugin {
 		<?php echo $this->wp_post_thumbnail_html( $item_id) ?>
 		</div>
 	<?php
+	}
+
+	/**
+	 * Prevent jetpack Phonon applied for menu item images.
+	 *
+	 * @param bool  $prevent
+	 * @param array $data
+	 *
+	 * @return bool
+	 */
+	public function jetpack_photon_override_image_downsize_filter( $prevent, $data ) {
+		return $this->isAttachmentUsed( $data['size'], $data['attachment_id'] );
+	}
+
+	/**
+	 * Set used attachment ids.
+	 *
+	 * @param string $size
+	 * @param int    $id
+	 */
+	public function setUsedAttachments( $size, $id ) {
+		$this->used_attachments[$size][] = $id;
+	}
+
+	/**
+	 * Check if attachment is used in menu items.
+	 *
+	 * @param string $size
+	 * @param int    $id
+	 *
+	 * @return bool
+	 */
+	public function isAttachmentUsed( $size, $id ) {
+		return isset( $this->used_attachments[$size] ) && in_array( $id, $this->used_attachments[$size] );
 	}
 }
 

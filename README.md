@@ -3,8 +3,8 @@
 **Tags:** menu, image, field, hover, wpml  
 **Donate link:** http://makeyoulivebetter.org.ua/buy-beer  
 **Requires at least:** 3.5.1  
-**Tested up to:** 3.9.1  
-**Stable tag:** 2.3  
+**Tested up to:** 4.0  
+**Stable tag:** 2.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -44,7 +44,7 @@ To add a new size (or remove an old one) add a function to the `menu_image_defau
 add_filter( 'menu_image_default_sizes', function($sizes){
 
   // remove the default 36x36 size
-  unset($sizes['menu-36x36'];
+  unset($sizes['menu-36x36']);
 
   // add a new size
   $sizes['menu-50x50'] = array(50,50);
@@ -66,6 +66,10 @@ add_filter( 'menu_image_default_sizes', function($sizes){
 
 
 ## Changelog ##
+
+### 2.4 ###
+* Fix compatibility with some modules and themes to according to [this topic](http://shazdeh.me/2014/06/25/custom-fields-nav-menu-items/)
+* Fix Jetpack Phonon frontend bug
 
 ### 2.3 ###
 * WPML menus sync support. Thanx @pabois for [feature request](http://wordpress.org/support/topic/very-good-wpml-compliant)
@@ -94,6 +98,9 @@ add_filter( 'menu_image_default_sizes', function($sizes){
 * Added default image sizes for menu items: 24x24, 36x36 and 48x48
 
 ## Upgrade Notice ##
+
+### 2.4 ###
+If your are using Jetpack Phonon module now menu icons will be look good.
 
 ### 2.3 ###
 If your are using WPML plugin, now when you sync menus, images will synced too.
