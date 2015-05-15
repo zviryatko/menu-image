@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Menu_Image
- * @version 2.4
+ * @version 2.5
  * @licence GPLv2
  */
 
@@ -10,7 +10,7 @@ Plugin Name: Menu Image
 Plugin URI: http://html-and-cms.com/plugins/menu-image/
 Description: Provide uploading images to menu item
 Author: Alex Davyskiba aka Zviryatko
-Version: 2.4
+Version: 2.5
 Author URI: http://makeyoulivebetter.org.ua/
 */
 

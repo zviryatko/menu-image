@@ -3,8 +3,8 @@ Contributors: zviryatko
 Tags: menu, image, field, hover, wpml
 Donate link: http://makeyoulivebetter.org.ua/buy-beer
 Requires at least: 3.5.1
-Tested up to: 4.0
-Stable tag: 2.4
+Tested up to: 4.2
+Stable tag: 2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,8 +32,7 @@ Now WPML compliant!
 
 = How to wrap menu link text in `span` html element =
 
-Where you show your menu with function `<?php wp_nav_menu(); ?>` as param you can add `array('link_before' => '<span>', 'link_after' => '</span>')`.
-It makes css markup easier.
+Menu link text is already wrapped in `span.menu-image-title`.
 
 = How to add another size for the image? =
 
@@ -41,7 +40,7 @@ To add a new size (or remove an old one) add a function to the `menu_image_defau
 
 `
 <?php
-add_filter( 'menu_image_default_sizes', function($sizes){
+add_filter( 'menu_image_default_sizes', function($sizes) {
 
   // remove the default 36x36 size
   unset($sizes['menu-36x36']);
@@ -62,6 +61,12 @@ add_filter( 'menu_image_default_sizes', function($sizes){
 2. Menu preview in standard twenty-thirteen theme
 
 == Changelog ==
+
+= 2.5 =
+* Add above and below title. Thanx @alhoseany
+* Add original image size. Thanx @alhoseany
+* Fix the loss of choices on size and title when updating image by ajax. Thanx @alhoseany
+* Fix hidden title on responsive select menu.
 
 = 2.4 =
 * Fix compatibility with some modules and themes to according to [this topic](http://shazdeh.me/2014/06/25/custom-fields-nav-menu-items/)
@@ -94,6 +99,9 @@ add_filter( 'menu_image_default_sizes', function($sizes){
 * Added default image sizes for menu items: 24x24, 36x36 and 48x48
 
 == Upgrade Notice ==
+
+= 2.5 =
+Now you can set link title below and above image, thanx @alhoseany.
 
 = 2.4 =
 If your are using Jetpack Phonon module now menu icons will be look good.
