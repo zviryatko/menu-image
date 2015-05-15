@@ -296,21 +296,19 @@ class Menu_Image_Plugin {
 
 		$item_output = "{$args->before}<a{$attributes} class='{$class}'>";
 		$link        = $args->link_before . apply_filters( 'the_title', $item->title, $item->ID ) . $args->link_after;
+		$none		 = ''; // Sugar.
 		switch ( $position ) {
 			case 'hide':
-				$item_output .= $image;
-				break;
 			case 'before':
-				$item_output .= $link . $image;
-				break;
 			case 'above':
-				$item_output .= $link . $image;
+				$item_args = array( $none, $link, $image );
 				break;
 			case 'after':
 			default:
-				$item_output .= $image . $link;
+				$item_args = array( $image, $link, $none );
 				break;
 		}
+		$item_output .= vsprintf( '%s<span class="menu-image-title">%s</span>%s', $item_args );
 		$item_output .= "</a>{$args->after}";
 
 		return $item_output;
