@@ -8,7 +8,7 @@
 				is_hover:			is_hover ? 1 : 0,
 				_wpnonce:     menuImage.settings.nonce
 			}).done( function( html ) {
-				$('.field-image', '#menu-item-' + item_id).html( html );
+				$('.menu-item-images', '#menu-item-' + item_id).html( html );
 			});
 		};
 

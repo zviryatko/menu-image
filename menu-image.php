@@ -282,6 +282,9 @@ class Menu_Image_Plugin {
 			case 'before':
 				$item_output .= $link . $image;
 				break;
+			case 'above':
+				$item_output .= $link . $image;
+				break;
 			case 'after':
 			default:
 				$item_output .= $image . $link;
@@ -340,15 +343,15 @@ class Menu_Image_Plugin {
 	}
 
 	/**
-	 * Output HTML for the menu item images section.
+	 * Output HTML for the menu item images.
 	 *
 	 * @since 2.0
 	 *
 	 * @param int $item_id The post ID or object associated with the thumbnail, defaults to global $post.
 	 * @return string html
 	 */
-	public function wp_post_thumbnail_html( $item_id ) {
-		$default_size = apply_filters( 'menu_image_default_size', 'menu-36x36' );;
+	public function wp_post_thumbnail_only_html( $item_id ) {
+		$default_size = apply_filters( 'menu_image_default_size', 'menu-36x36' );
 		$markup       = '<p class="description description-thin" ><label>%s<br /><a title="%s" href="#" class="set-post-thumbnail button%s" data-item-id="%s" style="height: auto;">%s</a>%s</label></p>';
 
 		$thumbnail_id = get_post_thumbnail_id( $item_id );
@@ -370,6 +373,21 @@ class Menu_Image_Plugin {
 			$hover_id ? wp_get_attachment_image( $hover_id, $default_size ) : esc_html__( 'Set image on hover', 'menu-image' ),
 			$hover_id ? '<a href="#" class="remove-post-thumbnail hover-image">' . __( 'Remove', 'menu-image' ) . '</a>' : ''
 		);
+    
+    	return $content;
+	}    
+  
+	/**
+	 * Output HTML for the menu item images section.
+	 *
+	 * @since 2.0
+	 *
+	 * @param int $item_id The post ID or object associated with the thumbnail, defaults to global $post.
+	 * @return string html
+	 */
+	public function wp_post_thumbnail_html( $item_id ) {
+		$default_size = apply_filters( 'menu_image_default_size', 'menu-36x36' );
+    	$content = $this->wp_post_thumbnail_only_html($item_id);
 
 		$image_size = get_post_meta( $item_id, '_menu_item_image_size', true );
 		if (!$image_size) $image_size = $default_size;
@@ -379,11 +397,12 @@ class Menu_Image_Plugin {
 		ob_start(); ?>
 
 		<div class="menu-item-image-options">
-			<p class="description description-thin">
+			<p class="description description-wide">
 				<label for="edit-menu-item-image-size-<?php echo $item_id; ?>"><?php _e( 'Image size', 'menu-image' ); ?><br/>
 					<select id="edit-menu-item-image-size-<?php echo $item_id; ?>"
 									class="widefat edit-menu-item-image-size"
 									name="menu_item_image_size[<?php echo $item_id; ?>]">
+			  			<option value='full' <?php $image_size == 'full' ? ' selected="selected"' : ''  ?>><?php _e( 'Original Size', 'menu-image' ) ?></option>
 						<?php foreach ( get_intermediate_image_sizes() as $size ) :
 							printf("<option value='%s'%s>%s</option>\n",
 								esc_attr($size),
@@ -394,12 +413,14 @@ class Menu_Image_Plugin {
 					</select>
 				</label>
 			</p>
-			<p class="description description-thin">
+			<p class="description description-wide">
 				<label><?php _e( 'Title position', 'menu-image' ); ?></label><br/>
 					<?php
 					$positions = array(
-						'before' => __( 'Before', 'menu-image' ),
 						'hide' => __( 'Hide', 'menu-image' ),
+						'above' => __( 'Above', 'menu-image' ),
+						'below' => __( 'Below', 'menu-image' ),
+						'before' => __( 'Before', 'menu-image' ),
 						'after' => __( 'After', 'menu-image' ),
 					);
 					foreach ( $positions as $position => $label) :
@@ -461,7 +482,7 @@ class Menu_Image_Plugin {
 		}
 
 		if ($success) {
-			$return = $this->wp_post_thumbnail_html( $post_ID );
+			$return = $this->wp_post_thumbnail_only_html( $post_ID );
 			$json ? wp_send_json_success( $return ) : wp_die( $return );
 		}
 
