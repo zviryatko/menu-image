@@ -4,7 +4,7 @@
 **Donate link:** http://makeyoulivebetter.org.ua/buy-beer  
 **Requires at least:** 3.5.1  
 **Tested up to:** 4.2  
-**Stable tag:** 2.5  
+**Stable tag:** 2.6  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -55,16 +55,29 @@ To add a new size (or remove an old one) add a function to the `menu_image_defau
 	?>
 
 
+### How to make hovered image visible on current page of menu item? ###
+
+Add this link to style.css
+
+	.menu-item.current-menu-item > a.menu-image-hovered img.hovered-image {
+	**  opacity:** 1;  
+	}
+
+
 ## Screenshots ##
 
 ### 1. Admin screen ###
-![Admin screen](http://ps.w.org/menu-image/assets/screenshot-1.png)
+![Admin screen](https://ps.w.org/menu-image/assets/screenshot-1.png)
 
 ### 2. Menu preview in standard twenty-thirteen theme ###
-![Menu preview in standard twenty-thirteen theme](http://ps.w.org/menu-image/assets/screenshot-2.png)
+![Menu preview in standard twenty-thirteen theme](https://ps.w.org/menu-image/assets/screenshot-2.png)
 
 
 ## Changelog ##
+
+### 2.6 ###
+* Fix bug on attachment page.
+* Add french translation. Thanx @CreativeJuiz
 
 ### 2.5 ###
 * Add above and below title. Thanx @alhoseany

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Menu_Image
- * @version 2.5
+ * @version 2.6
  * @licence GPLv2
  */
 
@@ -10,7 +10,7 @@ Plugin Name: Menu Image
 Plugin URI: http://html-and-cms.com/plugins/menu-image/
 Description: Provide uploading images to menu item
 Author: Alex Davyskiba aka Zviryatko
-Version: 2.5
+Version: 2.6
 Author URI: http://makeyoulivebetter.org.ua/
 */
 
@@ -275,6 +275,7 @@ class Menu_Image_Plugin {
 		$position   = $item->title_position ? $item->title_position : apply_filters( 'menu_image_default_title_position', 'after' );
 		$class      = "menu-image-title-{$position}";
 		$this->setUsedAttachments( $image_size, $item->thumbnail_id );
+		$image = '';
 		if ( $item->thumbnail_hover_id ) {
 			$this->setUsedAttachments( $image_size, $item->thumbnail_hover_id );
 			$hover_image_src = wp_get_attachment_image_src( $item->thumbnail_hover_id, $image_size );
@@ -289,7 +290,7 @@ class Menu_Image_Plugin {
 			);
 			$image .= '</span>';;
 			$class .= ' menu-image-hovered';
-		} else {
+		} elseif ( $item->thumbnail_id ) {
 			$image = wp_get_attachment_image( $item->thumbnail_id, $image_size, false, "class=menu-image {$class}" );
 			$class .= ' menu-image-not-hovered';
 		}

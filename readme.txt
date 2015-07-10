@@ -4,7 +4,7 @@ Tags: menu, image, field, hover, wpml
 Donate link: http://makeyoulivebetter.org.ua/buy-beer
 Requires at least: 3.5.1
 Tested up to: 4.2
-Stable tag: 2.5
+Stable tag: 2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,12 +55,25 @@ add_filter( 'menu_image_default_sizes', function($sizes) {
 ?>
 `
 
+= How to make hovered image visible on current page of menu item? =
+
+Add this link to style.css
+`
+.menu-item.current-menu-item > a.menu-image-hovered img.hovered-image {
+  opacity: 1;
+}
+`
+
 == Screenshots ==
 
 1. Admin screen
 2. Menu preview in standard twenty-thirteen theme
 
 == Changelog ==
+
+= 2.6 =
+* Fix bug on attachment page.
+* Add french translation. Thanx @CreativeJuiz
 
 = 2.5 =
 * Add above and below title. Thanx @alhoseany
