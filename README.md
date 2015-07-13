@@ -1,4 +1,6 @@
 # Menu Image #
+
+[![Join the chat at https://gitter.im/zviryatko/menu-image](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zviryatko/menu-image?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 **Contributors:** zviryatko  
 **Tags:** menu, image, field, hover, wpml  
 **Donate link:** http://makeyoulivebetter.org.ua/buy-beer  
