@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Menu_Image
- * @version 2.6
+ * @version 2.6.1
  * @licence GPLv2
  */
 
@@ -10,7 +10,7 @@ Plugin Name: Menu Image
 Plugin URI: http://html-and-cms.com/plugins/menu-image/
 Description: Provide uploading images to menu item
 Author: Alex Davyskiba aka Zviryatko
-Version: 2.6
+Version: 2.6.1
 Author URI: http://makeyoulivebetter.org.ua/
 */
 
@@ -564,7 +564,7 @@ class Menu_Image_Plugin {
 	 * @return bool
 	 */
 	public function isAttachmentUsed( $size, $id ) {
-		return isset( $this->used_attachments[ $size ] ) && in_array( $id, $this->used_attachments[ $size ] );
+		return is_string($size) && isset( $this->used_attachments[ $size ] ) && in_array( $id, $this->used_attachments[ $size ] );
 	}
 }
 
