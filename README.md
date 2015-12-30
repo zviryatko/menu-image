@@ -4,7 +4,7 @@
 **Donate link:** http://makeyoulivebetter.org.ua/buy-beer  
 **Requires at least:** 3.5.1  
 **Tested up to:** 4.4  
-**Stable tag:** 2.6.2  
+**Stable tag:** 2.6.3  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -38,55 +38,59 @@ Menu link text is already wrapped in `span.menu-image-title`.
 
 To add a new size (or remove an old one) add a function to the `menu_image_default_sizes` filter. For example
 
-`
-<?php
-add_filter( 'menu_image_default_sizes', function($sizes) {
 
-  // remove the default 36x36 size
-  unset($sizes['menu-36x36']);
+	<?php
+	add_filter( 'menu_image_default_sizes', function($sizes) {
+	
+	  // remove the default 36x36 size
+	  unset($sizes['menu-36x36']);
+	
+	  // add a new size
+	  $sizes['menu-50x50'] = array(50,50);
+	
+	  // return $sizes (required)
+	  return $sizes;
+	
+	});
+	?>
 
-  // add a new size
-  $sizes['menu-50x50'] = array(50,50);
-
-  // return $sizes (required)
-  return $sizes;
-
-});
-?>
-`
 
 ### How to make hovered image visible on current page of menu item? ###
 
 Add this link to style.css
-`
-.menu-item.current-menu-item > a.menu-image-hovered img.hovered-image {
-**  opacity:** 1;  
-}
-`
+
+	.menu-item.current-menu-item > a.menu-image-hovered img.hovered-image {
+	**  opacity:** 1;  
+	}
 
 = If you have problem with srcset image problem on Wordpress version >= 4.4 and Azure hosting =
 
 If you srcset property look like this:
-`<img width="36" height="36" src="http://static.mywebsite.com/website/myaction_express_menu_icon-36x36.png" class="attachment-menu-36x36 size-menu-36x36" alt="myaction_express_menu_icon" srcset="http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-50x50.png 50w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-75x75.png 75w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-24x24.png 24w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-36x36.png 36w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-48x48.png 48w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon.png 80w" sizes="(max-width: 36px) 100vw, 36px">`
+
+	<img width="36" height="36" src="http://static.mywebsite.com/website/myaction_express_menu_icon-36x36.png" class="attachment-menu-36x36 size-menu-36x36" alt="myaction_express_menu_icon" srcset="http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-50x50.png 50w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-75x75.png 75w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-24x24.png 24w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-36x36.png 36w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-48x48.png 48w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon.png 80w" sizes="(max-width: 36px) 100vw, 36px">
+
 Then you can disable srcset (add it to your function.php):
-`
-/**
- * Fix for broken images on azure & wordpress 4.4
- * @see https://wordpress.org/support/topic/wordpress-adding-absolute-paths
- */
-add_filter( 'wp_calculate_image_srcset', '__return_false' );
-`
+
+	/**
+	 * Fix for broken images on azure & wordpress 4.4
+	 * @see https://wordpress.org/support/topic/wordpress-adding-absolute-paths
+	 */
+	add_filter( 'wp_calculate_image_srcset', '__return_false' );
+
 
 ## Screenshots ##
 
 ### 1. Admin screen ###
-![Admin screen](http://s.wordpress.org/extend/plugins/menu-image/screenshot-1.png)
+![Admin screen](https://ps.w.org/menu-image/assets/screenshot-1.png)
 
 ### 2. Menu preview in standard twenty-thirteen theme ###
-![Menu preview in standard twenty-thirteen theme](http://s.wordpress.org/extend/plugins/menu-image/screenshot-2.png)
+![Menu preview in standard twenty-thirteen theme](https://ps.w.org/menu-image/assets/screenshot-2.png)
 
 
 ## Changelog ##
+
+### 2.6.3 ###
+* Fix php warning 'Invalid Argument foreach()' https://wordpress.org/support/topic/invalid-argument-foreach-in-menu-imagephp-line-126. Thanx @majancart
 
 ### 2.6.2 ###
 * Update FAQ to dial with srcset and Azure hosting https://wordpress.org/support/topic/wordpress-adding-absolute-paths. Thanx @GeertvanHorrik
