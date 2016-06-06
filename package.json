@@ -1,8 +1,8 @@
 {
   "name": "menu-image",
-  "version": "2.2.0",
+  "version": "2.6.4",
   "devDependencies": {
     "grunt": "^0.4.5",
-    "grunt-wp-readme-to-markdown": "^0.8.0"
+    "grunt-wp-readme-to-markdown": "^2.0"
   }
 }

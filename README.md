@@ -1,10 +1,10 @@
 # Menu Image #
-**Contributors:** zviryatko  
+**Contributors:** [zviryatko](https://profiles.wordpress.org/zviryatko)  
 **Tags:** menu, image, field, hover, wpml  
 **Donate link:** http://makeyoulivebetter.org.ua/buy-beer  
 **Requires at least:** 3.5.1  
-**Tested up to:** 4.4  
-**Stable tag:** 2.6.3  
+**Tested up to:** 4.5  
+**Stable tag:** 2.6.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -60,15 +60,14 @@ To add a new size (or remove an old one) add a function to the `menu_image_defau
 Add this link to style.css
 
 	.menu-item.current-menu-item > a.menu-image-hovered img.hovered-image {
-	**  opacity:** 1;  
+	  opacity: 1;
 	}
+
 
 = If you have problem with srcset image problem on Wordpress version >= 4.4 and Azure hosting =
 
 If you srcset property look like this:
-
-	<img width="36" height="36" src="http://static.mywebsite.com/website/myaction_express_menu_icon-36x36.png" class="attachment-menu-36x36 size-menu-36x36" alt="myaction_express_menu_icon" srcset="http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-50x50.png 50w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-75x75.png 75w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-24x24.png 24w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-36x36.png 36w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-48x48.png 48w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon.png 80w" sizes="(max-width: 36px) 100vw, 36px">
-
+`<img width="36" height="36" src="http://static.mywebsite.com/website/myaction_express_menu_icon-36x36.png" class="attachment-menu-36x36 size-menu-36x36" alt="myaction_express_menu_icon" srcset="http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-50x50.png 50w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-75x75.png 75w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-24x24.png 24w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-36x36.png 36w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-48x48.png 48w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon.png 80w" sizes="(max-width: 36px) 100vw, 36px">`
 Then you can disable srcset (add it to your function.php):
 
 	/**
@@ -88,6 +87,9 @@ Then you can disable srcset (add it to your function.php):
 
 
 ## Changelog ##
+
+### 2.6.4 ###
+* Fixing a clearing bug for WordPress 4.5+. Thanx @kau-boy
 
 ### 2.6.3 ###
 * Fix php warning 'Invalid Argument foreach()' https://wordpress.org/support/topic/invalid-argument-foreach-in-menu-imagephp-line-126. Thanx @majancart

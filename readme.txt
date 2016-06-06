@@ -3,8 +3,8 @@ Contributors: zviryatko
 Tags: menu, image, field, hover, wpml
 Donate link: http://makeyoulivebetter.org.ua/buy-beer
 Requires at least: 3.5.1
-Tested up to: 4.4
-Stable tag: 2.6.3
+Tested up to: 4.5
+Stable tag: 2.6.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,9 @@ add_filter( 'wp_calculate_image_srcset', '__return_false' );
 2. Menu preview in standard twenty-thirteen theme
 
 == Changelog ==
+
+= 2.6.4 =
+* Fixing a clearing bug for WordPress 4.5+. Thanx @kau-boy
 
 = 2.6.3 =
 * Fix php warning 'Invalid Argument foreach()' https://wordpress.org/support/topic/invalid-argument-foreach-in-menu-imagephp-line-126. Thanx @majancart

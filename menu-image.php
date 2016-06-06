@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Menu_Image
- * @version 2.6.1
+ * @version 2.6.4
  * @licence GPLv2
  */
 
@@ -10,7 +10,7 @@ Plugin Name: Menu Image
 Plugin URI: http://html-and-cms.com/plugins/menu-image/
 Description: Provide uploading images to menu item
 Author: Alex Davyskiba aka Zviryatko
-Version: 2.6.3
+Version: 2.6.4
 Author URI: http://makeyoulivebetter.org.ua/
 */
 
@@ -666,7 +666,7 @@ class Menu_Image_Walker_Nav_Menu_Edit extends Walker_Nav_Menu_Edit {
 				</dt>
 			</dl>
 
-			<div class="menu-item-settings" id="menu-item-settings-<?php echo $item_id; ?>">
+			<div class="menu-item-settings wp-clearfix" id="menu-item-settings-<?php echo $item_id; ?>">
 				<?php if( 'custom' == $item->type ) : ?>
 					<p class="field-url description description-wide">
 						<label for="edit-menu-item-url-<?php echo $item_id; ?>">
