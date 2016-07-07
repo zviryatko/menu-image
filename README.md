@@ -4,7 +4,7 @@
 **Donate link:** http://makeyoulivebetter.org.ua/buy-beer  
 **Requires at least:** 3.5.1  
 **Tested up to:** 4.5  
-**Stable tag:** 2.6.4  
+**Stable tag:** 2.6.5  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -87,6 +87,9 @@ Then you can disable srcset (add it to your function.php):
 
 
 ## Changelog ##
+
+### 2.6.5 ###
+* Add notification plugin.
 
 ### 2.6.4 ###
 * Fixing a clearing bug for WordPress 4.5+. Thanx @kau-boy
