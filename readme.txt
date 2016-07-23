@@ -4,7 +4,7 @@ Tags: menu, image, field, hover, wpml
 Donate link: http://makeyoulivebetter.org.ua/buy-beer
 Requires at least: 3.5.1
 Tested up to: 4.5
-Stable tag: 2.6.6
+Stable tag: 2.6.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +29,31 @@ Now WPML compliant!
 6. (WMPL users only) Goto WPML > WP Menus Sync and click to `Sync`
 
 == Frequently Asked Questions ==
+
+= How to add custom attributes to menu item link (useful for integration with dropdown menus) =
+
+Since 2.6.7 you can add custom classes to menu link:
+
+`
+<?php
+/**
+ * Fix dropdown menu for Flatsome theme.
+ *
+ * @param array  $attributes An array of attributes.
+ * @param object $item      Menu item data object.
+ * @param int    $depth     Depth of menu item. Used for padding.
+ * @param object $args
+ *
+ * @return array
+ */
+public function flatsome_dropdown_fix_menu_image_link_attributes_filter( $attributes, $item, $depth, $args ) {
+    if ($args->walker instanceof FlatsomeNavDropdown && $depth === 0) {
+        $attributes['class'] .= ' nav-top-link';
+    }
+    return $attributes;
+}
+add_filter( 'menu_image_link_attributes', 'flatsome_dropdown_fix_menu_image_link_attributes_filter', 10, 4 );
+`
 
 = How to wrap menu link text in `span` html element =
 
@@ -83,6 +108,12 @@ add_filter( 'wp_calculate_image_srcset', '__return_false' );
 2. Menu preview in standard twenty-thirteen theme
 
 == Changelog ==
+
+= 2.6.7 =
+* Add `menu_image_link_attributes` filter, fix bug with menu dropdown in Flatsome theme https://wordpress.org/support/topic/bug-image-menu-dropdown. Reported by @apardo
+
+= 2.6.6 =
+* Fix various php errors.
 
 = 2.6.5 =
 * Add notification plugin.

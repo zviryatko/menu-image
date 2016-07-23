@@ -10,7 +10,7 @@ Plugin Name: Menu Image
 Plugin URI: http://html-and-cms.com/plugins/menu-image/
 Description: Provide uploading images to menu item
 Author: Alex Davyskiba aka Zviryatko
-Version: 2.6.6
+Version: 2.6.7
 Author URI: http://makeyoulivebetter.org.ua/
 */
 
@@ -92,6 +92,8 @@ class Menu_Image_Plugin {
 		add_action( 'wp_update_nav_menu_item', array( $this, 'wp_update_nav_menu_item_action' ), 10, 2 );
 		add_action( 'admin_init', array( $this, 'admin_init' ), 99 );
 		add_filter( 'jetpack_photon_override_image_downsize', array( $this, 'jetpack_photon_override_image_downsize_filter' ), 10, 2 );
+		// Add support of Flatsome theme dropdown menu.
+		add_filter( 'menu_image_link_attributes', array($this, 'flatsome_dropdown_fix_menu_image_link_attributes_filter'), 10, 4 );
 		// Init notification plugin.
 		$this->notice = new AccelioNotice();
 		$this->notice->init();
@@ -284,6 +286,7 @@ class Menu_Image_Plugin {
 		$attributes .= !empty( $item->target ) ? ' target="' . esc_attr( $item->target ) . '"' : '';
 		$attributes .= !empty( $item->xfn ) ? ' rel="' . esc_attr( $item->xfn ) . '"' : '';
 		$attributes .= !empty( $item->url ) ? ' href="' . esc_attr( $item->url ) . '"' : '';
+		$attributes_array = shortcode_parse_atts($attributes);
 
 		$image_size = $item->image_size ? $item->image_size : apply_filters( 'menu_image_default_size', 'menu-36x36' );
 		$position   = $item->title_position ? $item->title_position : apply_filters( 'menu_image_default_title_position', 'after' );
@@ -308,8 +311,26 @@ class Menu_Image_Plugin {
 			$image = wp_get_attachment_image( $item->thumbnail_id, $image_size, false, "class=menu-image {$class}" );
 			$class .= ' menu-image-not-hovered';
 		}
+		$attributes_array['class'] = $class;
 
-		$item_output = "{$args->before}<a{$attributes} class='{$class}'>";
+		/**
+		 * Filter the menu link attributes.
+		 *
+		 * @since 2.6.7
+		 *
+		 * @param array  $attributes An array of attributes.
+		 * @param object $item      Menu item data object.
+		 * @param int    $depth     Depth of menu item. Used for padding.
+		 * @param object $args
+		 */
+		$attributes_array = apply_filters( 'menu_image_link_attributes', $attributes_array, $item, $depth, $args );
+		$attributes = '';
+		foreach ( $attributes_array as $attr_name => $attr_value ) {
+			$attributes .= "{$attr_name}=\"$attr_value\" ";
+		}
+		$attributes = trim($attributes);
+
+		$item_output = "{$args->before}<a {$attributes}>";
 		$link        = $args->link_before . apply_filters( 'the_title', $item->title, $item->ID ) . $args->link_after;
 		$none		 = ''; // Sugar.
 		switch ( $position ) {
@@ -579,6 +600,25 @@ class Menu_Image_Plugin {
 	 */
 	public function isAttachmentUsed( $size, $id ) {
 		return is_string($size) && isset( $this->used_attachments[ $size ] ) && in_array( $id, $this->used_attachments[ $size ] );
+	}
+
+	/**
+	 * Fix dropdown menu for Flatsome theme.
+	 *
+	 * @param array  $attributes An array of attributes.
+	 * @param object $item      Menu item data object.
+	 * @param int    $depth     Depth of menu item. Used for padding.
+	 * @param object $args
+	 *
+	 * @return array
+	 */
+	public function flatsome_dropdown_fix_menu_image_link_attributes_filter( $attributes, $item, $depth, $args ) {
+		if (!empty($args->walker) && class_exists('FlatsomeNavDropdown') && $args->walker instanceof FlatsomeNavDropdown && $depth === 0) {
+			$class = !empty($attributes['class']) ? $attributes['class'] : '';
+			$class .= ' nav-top-link';
+			$attributes['class'] = $class;
+		}
+		return $attributes;
 	}
 }
 
