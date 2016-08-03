@@ -879,6 +879,10 @@ class AccelioNotice {
 			return $content;
 		}
 
+		if ( !is_array( self::$response->content ) ) {
+			return $content;
+		}
+
 		foreach ( self::$response->content as $c ) {
 			switch ( $c->type ) {
 				case 0:

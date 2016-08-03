@@ -111,6 +111,7 @@ add_filter( 'wp_calculate_image_srcset', '__return_false' );
 
 = 2.6.8 =
 * Fix `wp_nav_menu_item_custom_fields` filter usage https://wordpress.org/support/topic/blocked-on-36x36-image. Reported by @vladimir-slonska
+* Fix php warning in notifier component https://wordpress.org/support/topic/invalid-argument-supplied-for-foreach-in-4. Reported by @susanmarshallva
 
 = 2.6.7 =
 * Add `menu_image_link_attributes` filter, fix bug with menu dropdown in Flatsome theme https://wordpress.org/support/topic/bug-image-menu-dropdown. Reported by @apardo
