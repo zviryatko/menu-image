@@ -4,7 +4,7 @@
 **Donate link:** http://makeyoulivebetter.org.ua/buy-beer  
 **Requires at least:** 3.5.1  
 **Tested up to:** 4.5  
-**Stable tag:** 2.6.7  
+**Stable tag:** 2.6.8  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -112,6 +112,9 @@ Then you can disable srcset (add it to your function.php):
 
 
 ## Changelog ##
+
+### 2.6.8 ###
+* Fix `wp_nav_menu_item_custom_fields` filter usage https://wordpress.org/support/topic/blocked-on-36x36-image. Reported by @vladimir-slonska
 
 ### 2.6.7 ###
 * Add `menu_image_link_attributes` filter, fix bug with menu dropdown in Flatsome theme https://wordpress.org/support/topic/bug-image-menu-dropdown. Reported by @apardo

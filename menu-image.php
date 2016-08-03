@@ -10,7 +10,7 @@ Plugin Name: Menu Image
 Plugin URI: http://html-and-cms.com/plugins/menu-image/
 Description: Provide uploading images to menu item
 Author: Alex Davyskiba aka Zviryatko
-Version: 2.6.7
+Version: 2.6.8
 Author URI: http://makeyoulivebetter.org.ua/
 */
 
@@ -107,7 +107,7 @@ class Menu_Image_Plugin {
 		if ( !has_action( 'wp_nav_menu_item_custom_fields' ) ) {
 			add_filter( 'wp_edit_nav_menu_walker', array( $this, 'menu_image_edit_nav_menu_walker_filter' ) );
 		}
-		add_action( 'wp_nav_menu_item_custom_fields', array( $this, 'menu_item_custom_fields' ), 10, 1 );
+		add_action( 'wp_nav_menu_item_custom_fields', array( $this, 'menu_item_custom_fields' ), 10, 4 );
 	}
 
 	/**
@@ -559,11 +559,19 @@ class Menu_Image_Plugin {
 	}
 
 	/**
-	 * Add custom fields to menu item as suggest to http://shazdeh.me/2014/06/25/custom-fields-nav-menu-items/
+	 * Add custom fields to menu item.
+	 *
+	 * @param int    $item_id
+	 * @param object $item
+	 * @param int    $depth
+	 * @param array  $args
+	 *
+	 * @see http://web.archive.org/web/20141021012233/http://shazdeh.me/2014/06/25/custom-fields-nav-menu-items
+	 * @see https://core.trac.wordpress.org/ticket/18584
 	 */
-	public function menu_item_custom_fields( $item_id ) { ?>
+	public function menu_item_custom_fields( $item_id, $item, $depth, $args ) { ?>
 		<div class="field-image hide-if-no-js wp-media-buttons">
-			<?php echo $this->wp_post_thumbnail_html( $item_id ) ?>
+			<?php echo $this->wp_post_thumbnail_html( $item_id ?: $item->ID ) ?>
 		</div>
 	<?php
 	}
