@@ -4,7 +4,7 @@ Tags: menu, image, field, hover, wpml
 Donate link: http://makeyoulivebetter.org.ua/buy-beer
 Requires at least: 3.5.1
 Tested up to: 4.5
-Stable tag: 2.6.8
+Stable tag: 2.6.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -108,6 +108,9 @@ add_filter( 'wp_calculate_image_srcset', '__return_false' );
 2. Menu preview in standard twenty-thirteen theme
 
 == Changelog ==
+
+= 2.6.9 =
+* Revert back php <=5.2 support, https://wordpress.org/support/topic/upgrade-to-wp-453-and-268-and-got-this-error. Reported by @itmnetcom and @cjg79
 
 = 2.6.8 =
 * Fix `wp_nav_menu_item_custom_fields` filter usage https://wordpress.org/support/topic/blocked-on-36x36-image. Reported by @vladimir-slonska

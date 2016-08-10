@@ -10,7 +10,7 @@ Plugin Name: Menu Image
 Plugin URI: http://html-and-cms.com/plugins/menu-image/
 Description: Provide uploading images to menu item
 Author: Alex Davyskiba aka Zviryatko
-Version: 2.6.8
+Version: 2.6.9
 Author URI: http://makeyoulivebetter.org.ua/
 */
 
@@ -569,9 +569,13 @@ class Menu_Image_Plugin {
 	 * @see http://web.archive.org/web/20141021012233/http://shazdeh.me/2014/06/25/custom-fields-nav-menu-items
 	 * @see https://core.trac.wordpress.org/ticket/18584
 	 */
-	public function menu_item_custom_fields( $item_id, $item, $depth, $args ) { ?>
+	public function menu_item_custom_fields( $item_id, $item, $depth, $args ) {
+		if (!$item_id && isset($item->ID)) {
+			$item_id = $item->ID;
+		}
+		?>
 		<div class="field-image hide-if-no-js wp-media-buttons">
-			<?php echo $this->wp_post_thumbnail_html( $item_id ?: $item->ID ) ?>
+			<?php echo $this->wp_post_thumbnail_html( $item_id ) ?>
 		</div>
 	<?php
 	}
