@@ -1,10 +1,10 @@
 # Menu Image #
-**Contributors:** [zviryatko](https://profiles.wordpress.org/zviryatko)  
+**Contributors:** zviryatko  
 **Tags:** menu, image, field, hover, wpml  
 **Donate link:** http://makeyoulivebetter.org.ua/buy-beer  
 **Requires at least:** 3.5.1  
 **Tested up to:** 4.5  
-**Stable tag:** 2.6.9  
+**Stable tag:** 2.7.0  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -34,26 +34,26 @@ Now WPML compliant!
 
 Since 2.6.7 you can add custom classes to menu link:
 
-
-	<?php
-	/**
-	 * Fix dropdown menu for Flatsome theme.
-	 *
-	 * @param array  $attributes An array of attributes.
-	 * @param object $item      Menu item data object.
-	 * @param int    $depth     Depth of menu item. Used for padding.
-	 * @param object $args
-	 *
-	 * @return array
-	 */
-	public function flatsome_dropdown_fix_menu_image_link_attributes_filter( $attributes, $item, $depth, $args ) {
-	    if ($args->walker instanceof FlatsomeNavDropdown && $depth === 0) {
-	        $attributes['class'] .= ' nav-top-link';
-	    }
-	    return $attributes;
-	}
-	add_filter( 'menu_image_link_attributes', 'flatsome_dropdown_fix_menu_image_link_attributes_filter', 10, 4 );
-
+`
+<?php
+/**
+ * Fix dropdown menu for Flatsome theme.
+ *
+ * @param array  $attributes An array of attributes.
+ * @param object $item      Menu item data object.
+ * @param int    $depth     Depth of menu item. Used for padding.
+ * @param object $args
+ *
+ * @return array
+ */
+public function flatsome_dropdown_fix_menu_image_link_attributes_filter( $attributes, $item, $depth, $args ) {
+    if ($args->walker instanceof FlatsomeNavDropdown && $depth === 0) {
+        $attributes['class'] .= ' nav-top-link';
+    }
+    return $attributes;
+}
+add_filter( 'menu_image_link_attributes', 'flatsome_dropdown_fix_menu_image_link_attributes_filter', 10, 4 );
+`
 
 ### How to wrap menu link text in `span` html element ###
 
@@ -63,44 +63,44 @@ Menu link text is already wrapped in `span.menu-image-title`.
 
 To add a new size (or remove an old one) add a function to the `menu_image_default_sizes` filter. For example
 
+`
+<?php
+add_filter( 'menu_image_default_sizes', function($sizes) {
 
-	<?php
-	add_filter( 'menu_image_default_sizes', function($sizes) {
-	
-	  // remove the default 36x36 size
-	  unset($sizes['menu-36x36']);
-	
-	  // add a new size
-	  $sizes['menu-50x50'] = array(50,50);
-	
-	  // return $sizes (required)
-	  return $sizes;
-	
-	});
-	?>
+  // remove the default 36x36 size
+  unset($sizes['menu-36x36']);
 
+  // add a new size
+  $sizes['menu-50x50'] = array(50,50);
+
+  // return $sizes (required)
+  return $sizes;
+
+});
+?>
+`
 
 ### How to make hovered image visible on current page of menu item? ###
 
 Add this link to style.css
-
-	.menu-item.current-menu-item > a.menu-image-hovered img.hovered-image {
-	  opacity: 1;
-	}
-
+`
+.menu-item.current-menu-item > a.menu-image-hovered img.hovered-image {
+**  opacity:** 1;  
+}
+`
 
 = If you have problem with srcset image problem on Wordpress version >= 4.4 and Azure hosting =
 
 If you srcset property look like this:
 `<img width="36" height="36" src="http://static.mywebsite.com/website/myaction_express_menu_icon-36x36.png" class="attachment-menu-36x36 size-menu-36x36" alt="myaction_express_menu_icon" srcset="http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-50x50.png 50w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-75x75.png 75w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-24x24.png 24w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-36x36.png 36w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon-48x48.png 48w, http://www.mywebsite.com/wp-content/uploads/D:homesitewwwroot/wp-content/uploads/myaction_express_menu_icon.png 80w" sizes="(max-width: 36px) 100vw, 36px">`
 Then you can disable srcset (add it to your function.php):
-
-	/**
-	 * Fix for broken images on azure & wordpress 4.4
-	 * @see https://wordpress.org/support/topic/wordpress-adding-absolute-paths
-	 */
-	add_filter( 'wp_calculate_image_srcset', '__return_false' );
-
+`
+/**
+ * Fix for broken images on azure & wordpress 4.4
+ * @see https://wordpress.org/support/topic/wordpress-adding-absolute-paths
+ */
+add_filter( 'wp_calculate_image_srcset', '__return_false' );
+`
 
 ## Screenshots ##
 
@@ -112,6 +112,9 @@ Then you can disable srcset (add it to your function.php):
 
 
 ## Changelog ##
+
+### 2.7.0 ###
+* Remove notification plugin. It was not a good idea btw.
 
 ### 2.6.9 ###
 * Revert back php <=5.2 support, https://wordpress.org/support/topic/upgrade-to-wp-453-and-268-and-got-this-error. Reported by @itmnetcom and @cjg79

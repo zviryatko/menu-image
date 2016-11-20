@@ -10,7 +10,7 @@ Plugin Name: Menu Image
 Plugin URI: http://html-and-cms.com/plugins/menu-image/
 Description: Provide uploading images to menu item
 Author: Alex Davyskiba aka Zviryatko
-Version: 2.6.9
+Version: 2.7.0
 Author URI: http://makeyoulivebetter.org.ua/
 */
 
@@ -29,8 +29,6 @@ Author URI: http://makeyoulivebetter.org.ua/
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
-require_once( 'notice.php' );
 
 /**
  * Provide attaching images to menu items.
@@ -67,13 +65,6 @@ class Menu_Image_Plugin {
 	private $additionalDisplayableImageExtensions = array( 'ico' );
 
 	/**
-	 * Notification plugin.
-	 *
-	 * @var AccelioNotice
-	 */
-	private $notice;
-
-	/**
 	 * Plugin constructor, add all filters and actions.
 	 */
 	public function __construct() {
@@ -94,9 +85,6 @@ class Menu_Image_Plugin {
 		add_filter( 'jetpack_photon_override_image_downsize', array( $this, 'jetpack_photon_override_image_downsize_filter' ), 10, 2 );
 		// Add support of Flatsome theme dropdown menu.
 		add_filter( 'menu_image_link_attributes', array($this, 'flatsome_dropdown_fix_menu_image_link_attributes_filter'), 10, 4 );
-		// Init notification plugin.
-		$this->notice = new AccelioNotice();
-		$this->notice->init();
 	}
 
 	/**
