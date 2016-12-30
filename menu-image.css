@@ -29,13 +29,13 @@
 .menu-item a.menu-image-hovered.menu-image-title-above .menu-image-hover-wrapper {
     display: block;
     padding-top: 10px;
-    margin: 0 auto;
+    margin: 0 auto !important;
 }
 .menu-item a.menu-image-title-below.menu-image-not-hovered img,
 .menu-item a.menu-image-hovered.menu-image-title-below .menu-image-hover-wrapper {
     display: block;
     padding-bottom: 10px;
-    margin: 0 auto;
+    margin: 0 auto !important;
 }
 .menu-item a.menu-image-title-hide .menu-image-title {
 	display: none;
