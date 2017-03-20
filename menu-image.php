@@ -7,7 +7,7 @@
 
 /*
 Plugin Name: Menu Image
-Plugin URI: http://html-and-cms.com/plugins/menu-image/
+Plugin URI: https://makeyoulivebetter.org.ua/menu-image/
 Description: Provide uploading images to menu item
 Author: Alex Davyskiba aka Zviryatko
 Version: 2.8.0
