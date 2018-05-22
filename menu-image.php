@@ -10,7 +10,7 @@ Plugin Name: Menu Image
 Plugin URI: https://makeyoulivebetter.org.ua/menu-image/
 Description: Provide uploading images to menu item
 Author: Alex Davyskiba aka Zviryatko
-Version: 2.8.0
+Version: 2.9.0
 Author URI: http://makeyoulivebetter.org.ua/
 */
 

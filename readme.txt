@@ -4,7 +4,7 @@ Tags: menu, image, field, hover, wpml
 Donate link: http://makeyoulivebetter.org.ua/buy-beer
 Requires at least: 4.4.0
 Tested up to: 4.7
-Stable tag: 2.8.0
+Stable tag: 2.9.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,11 @@ add_filter( 'wp_calculate_image_srcset', '__return_false' );
 2. Menu preview in standard twenty-thirteen theme
 
 == Changelog ==
+
+### 2.9.0 ###
+* Update admin part copy regarding to new wp version.
+* Fix support url.
+* Fix php warning.
 
 = 2.8.0 =
 * Use core `nav_menu_link_attributes`, `nav_menu_item_title` filters to add image and class instead of `walker_nav_menu_start_el` filter.
