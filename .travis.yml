@@ -1,0 +1,63 @@
+language: php
+
+branches:
+  only:
+    - master
+    - /^(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/
+
+services:
+  - mysql
+
+cache:
+  apt: true
+  directories:
+    - $HOME/.composer/cache/files
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
+
+php:
+  - 7.1
+  - 7.2
+  - nightly
+
+env:
+  global:
+    - COMPOSER_NO_INTERACTION=1
+  matrix:
+    - WP_VERSION=nightly
+    - WP_VERSION=latest
+    - WP_VERSION=4.9.3
+    - WP_VERSION=4.8.5
+
+matrix:
+  allow_failures:
+    - php: nightly
+    - env: WP_VERSION=nightly
+  fast_finish: true
+
+before_install:
+  - export PATH="$TRAVIS_BUILD_DIR/vendor/bin:$PATH"
+  - export PATH="$TRAVIS_BUILD_DIR/bin:$PATH"
+  - mysql -e 'CREATE DATABASE wordpress;'
+
+install:
+  - composer install --dev --prefer-dist --no-suggest
+  - ./vendor/bin/wp core download --path=/tmp/wp
+  - tests/setup.sh
+
+before_script:
+  - php -S localhost:8080 -t /tmp/wp
+
+script:
+  ### Assert that WordPress is served at `http://localhost:8080`
+  # Echo the WordPress Homepage source code
+  - curl -vsf 'http://localhost:8080' &> /dev/stdout
+
+  # Display the WordPress version.
+  - wp core version --path=/tmp/wordpress
+
+  # Run tests
+  - ./vendor/bin/codecept run
