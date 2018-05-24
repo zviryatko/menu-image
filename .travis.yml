@@ -1,0 +1,51 @@
+language: php
+
+branches:
+  only:
+    - master
+    - /^(?:(\d+)\.)?(?:(\d+)\.)?(\*|\d+)$/
+
+services:
+  - mysql
+
+cache:
+  apt: true
+  directories:
+    - $HOME/.composer/cache/files
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
+
+php:
+  - 7.1
+  - 7.2
+  - nightly
+
+env:
+  global:
+    - COMPOSER_NO_INTERACTION=1
+
+matrix:
+  allow_failures:
+    - php: nightly
+  fast_finish: true
+
+before_install:
+  - export PATH="$TRAVIS_BUILD_DIR/vendor/bin:$PATH"
+  - export PATH="$TRAVIS_BUILD_DIR/bin:$PATH"
+  - mysql -e 'CREATE DATABASE wordpress;'
+  - wget -qO- https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2 | tar xj -C /tmp
+
+install:
+  - composer install --quiet --dev --prefer-dist --no-suggest
+  - ./vendor/bin/wp core download --path=/tmp/wp
+  - bash -v tests/setup.sh
+
+before_script:
+  - /tmp/phantomjs-1.9.8-linux-x86_64/bin/phantomjs 2>&1 --webdriver=4444 &
+  - php -S localhost:8080 2>&1 -t /tmp/wp &
+
+script:
+  - ./vendor/bin/codecept run

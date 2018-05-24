@@ -1,0 +1,17 @@
+{
+    "name": "zviryatko/menu-image",
+    "description": "Adds a field to load the image in a menu item and displays the image inside the link in the menu before the text.",
+    "type": "wordpress-plugin",
+    "license": "GPLv2 or later",
+    "authors": [
+        {
+            "name": "Alex Davyskiba",
+            "email": "sanya.davyskiba@gmail.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "lucatume/wp-browser": "^2.1",
+        "monolog/monolog": "^1.23"
+    }
+}
