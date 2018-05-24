@@ -126,7 +126,7 @@ class Menu_Image_Plugin {
 		$this->image_sizes = apply_filters( 'menu_image_default_sizes', $this->image_sizes );
 		if (is_array($this->image_sizes)) {
 			foreach ($this->image_sizes as $name => $params) {
-				add_image_size($name, $params[0], $params[1], $params[2]);
+				add_image_size($name, $params[0], $params[1], ( array_key_exists(2, $params) ? $params[2] : false ) );
 			}
 		}
 		load_plugin_textdomain( 'menu-image', false, basename( dirname( __FILE__ ) ) . '/languages' );
