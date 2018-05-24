@@ -2,9 +2,9 @@
 Contributors: zviryatko
 Tags: menu, image, field, hover, wpml
 Donate link: http://makeyoulivebetter.org.ua/buy-beer
-Requires at least: 3.5.1
-Tested up to: 4.5
-Stable tag: 2.7.0
+Requires at least: 4.4.0
+Tested up to: 4.7
+Stable tag: 2.8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,28 +32,7 @@ Now WPML compliant!
 
 = How to add custom attributes to menu item link (useful for integration with dropdown menus) =
 
-Since 2.6.7 you can add custom classes to menu link:
-
-`
-<?php
-/**
- * Fix dropdown menu for Flatsome theme.
- *
- * @param array  $attributes An array of attributes.
- * @param object $item      Menu item data object.
- * @param int    $depth     Depth of menu item. Used for padding.
- * @param object $args
- *
- * @return array
- */
-public function flatsome_dropdown_fix_menu_image_link_attributes_filter( $attributes, $item, $depth, $args ) {
-    if ($args->walker instanceof FlatsomeNavDropdown && $depth === 0) {
-        $attributes['class'] .= ' nav-top-link';
-    }
-    return $attributes;
-}
-add_filter( 'menu_image_link_attributes', 'flatsome_dropdown_fix_menu_image_link_attributes_filter', 10, 4 );
-`
+Use core `nav_menu_link_attributes` and `nav_menu_item_title` filters.
 
 = How to wrap menu link text in `span` html element =
 
@@ -108,6 +87,10 @@ add_filter( 'wp_calculate_image_srcset', '__return_false' );
 2. Menu preview in standard twenty-thirteen theme
 
 == Changelog ==
+
+= 2.8.0 =
+* Use core `nav_menu_link_attributes`, `nav_menu_item_title` filters to add image and class instead of `walker_nav_menu_start_el` filter.
+* Drop support of core version < 4.4.0.
 
 = 2.7.0 =
 * Remove notification plugin. It was not a good idea btw.
