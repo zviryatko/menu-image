@@ -260,85 +260,6 @@ class Menu_Image_Plugin {
 	}
 
 	/**
-	 * Replacement default menu item output.
-	 *
-	 * @param string $item_output Default item output
-	 * @param object $item        Menu item data object.
-	 * @param int    $depth       Depth of menu item. Used for padding.
-	 * @param object $args
-	 *
-	 * @return string
-	 */
-	public function menu_image_nav_menu_item_filter( $item_output, $item, $depth, $args ) {
-		$attributes = !empty( $item->attr_title ) ? ' title="' . esc_attr( $item->attr_title ) . '"' : '';
-		$attributes .= !empty( $item->target ) ? ' target="' . esc_attr( $item->target ) . '"' : '';
-		$attributes .= !empty( $item->xfn ) ? ' rel="' . esc_attr( $item->xfn ) . '"' : '';
-		$attributes .= !empty( $item->url ) ? ' href="' . esc_attr( $item->url ) . '"' : '';
-		$attributes_array = shortcode_parse_atts($attributes);
-
-		$image_size = $item->image_size ? $item->image_size : apply_filters( 'menu_image_default_size', 'menu-36x36' );
-		$position   = $item->title_position ? $item->title_position : apply_filters( 'menu_image_default_title_position', 'after' );
-		$class      = "menu-image-title-{$position}";
-		$this->setUsedAttachments( $image_size, $item->thumbnail_id );
-		$image = '';
-		if ( $item->thumbnail_hover_id ) {
-			$this->setUsedAttachments( $image_size, $item->thumbnail_hover_id );
-			$hover_image_src = wp_get_attachment_image_src( $item->thumbnail_hover_id, $image_size );
-			$margin_size     = $hover_image_src[ 1 ];
-			$image           = "<span class='menu-image-hover-wrapper'>";
-			$image .= wp_get_attachment_image( $item->thumbnail_id, $image_size, false, "class=menu-image {$class}" );
-			$image .= wp_get_attachment_image(
-				$item->thumbnail_hover_id, $image_size, false, array(
-					'class' => "hovered-image {$class}",
-					'style' => "margin-left: -{$margin_size}px;",
-				)
-			);
-			$image .= '</span>';;
-			$class .= ' menu-image-hovered';
-		} elseif ( $item->thumbnail_id ) {
-			$image = wp_get_attachment_image( $item->thumbnail_id, $image_size, false, "class=menu-image {$class}" );
-			$class .= ' menu-image-not-hovered';
-		}
-		$attributes_array['class'] = $class;
-
-		/**
-		 * Filter the menu link attributes.
-		 *
-		 * @since 2.6.7
-		 *
-		 * @param array  $attributes An array of attributes.
-		 * @param object $item      Menu item data object.
-		 * @param int    $depth     Depth of menu item. Used for padding.
-		 * @param object $args
-		 */
-		$attributes_array = apply_filters( 'menu_image_link_attributes', $attributes_array, $item, $depth, $args );
-		$attributes = '';
-		foreach ( $attributes_array as $attr_name => $attr_value ) {
-			$attributes .= "{$attr_name}=\"$attr_value\" ";
-		}
-		$attributes = trim($attributes);
-
-		$item_output = "{$args->before}<a {$attributes}>";
-		$link        = $args->link_before . apply_filters( 'the_title', $item->title, $item->ID ) . $args->link_after;
-		$none		 = ''; // Sugar.
-		switch ( $position ) {
-			case 'hide':
-			case 'before':
-			case 'above':
-				$item_args = array( $none, $link, $image );
-				break;
-			case 'after':
-			default:
-				$item_args = array( $image, $link, $none );
-				break;
-		}
-		$item_output .= vsprintf( '%s<span class="menu-image-title">%s</span>%s', $item_args );
-		$item_output .= "</a>{$args->after}";
-
-		return $item_output;
-	}
-
-	/**
 	 * Filters the HTML attributes applied to a menu item's anchor element.
 	 *
      * @param array $atts {
@@ -353,12 +274,12 @@ class Menu_Image_Plugin {
 	 * @param stdClass $args  An object of wp_nav_menu() arguments.
 	 * @param int      $depth Depth of menu item. Used for padding.
 	 *
-	 * @return string
+	 * @return array Link attributes.
 	 */
 	public function menu_image_nav_menu_link_attributes_filter( $atts, $item, $args, $depth = null ) {
 		$position = $item->title_position ? $item->title_position : apply_filters( 'menu_image_default_title_position', 'after' );
-		$class    = ! empty( $attributes[ 'class' ] ) ? $attributes[ 'class' ] : '';
-		$class .= " menu-image-title-{$position}";
+		$class    = ! empty( $atts[ 'class' ] ) ? $atts[ 'class' ] : '';
+		$class    .= " menu-image-title-{$position}";
 		if ( $item->thumbnail_hover_id ) {
 			$class .= ' menu-image-hovered';
 		} elseif ( $item->thumbnail_id ) {
@@ -368,9 +289,9 @@ class Menu_Image_Plugin {
 		if ( ! empty( $args->walker ) && class_exists( 'FlatsomeNavDropdown' ) && $args->walker instanceof FlatsomeNavDropdown && ! is_null( $depth ) && $depth === 0 ) {
 			$class .= ' nav-top-link';
 		}
-		$attributes[ 'class' ] = $class;
+		$atts[ 'class' ] = trim( $class );
 
-		return $attributes;
+		return $atts;
 	}
 
 	/**
