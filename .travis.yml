@@ -26,11 +26,37 @@ php:
 env:
   global:
     - COMPOSER_NO_INTERACTION=1
+  matrix:
+    - WP_VERSION=nightly  WP_THEME=twentyseventeen
+    - WP_VERSION=nightly  WP_THEME=twentysixteen
+    - WP_VERSION=nightly  WP_THEME=twentyfifteen
+    - WP_VERSION=latest   WP_THEME=twentyseventeen
+    - WP_VERSION=latest   WP_THEME=twentysixteen
+    - WP_VERSION=latest   WP_THEME=twentyfifteen
+    - WP_VERSION=4.9      WP_THEME=twentyseventeen
+    - WP_VERSION=4.9      WP_THEME=twentysixteen
+    - WP_VERSION=4.9      WP_THEME=twentyfifteen
+    - WP_VERSION=4.8      WP_THEME=twentyseventeen
+    - WP_VERSION=4.8      WP_THEME=twentysixteen
+    - WP_VERSION=4.8      WP_THEME=twentyfifteen
+    - WP_VERSION=4.7      WP_THEME=twentyseventeen
+    - WP_VERSION=4.7      WP_THEME=twentysixteen
+    - WP_VERSION=4.7      WP_THEME=twentyfifteen
+    - WP_VERSION=4.6      WP_THEME=twentyseventeen
+    - WP_VERSION=4.6      WP_THEME=twentysixteen
+    - WP_VERSION=4.6      WP_THEME=twentyfifteen
 
 matrix:
   allow_failures:
     - php: nightly
+    - env: WP_VERSION=nightly
   fast_finish: true
+  include:
+    - php: 7.0
+      env: KEY=VALUE
+    allow_failures:
+    - php: 7.0
+      env: KEY=VALUE
 
 before_install:
   - export PATH="$TRAVIS_BUILD_DIR/vendor/bin:$PATH"
@@ -39,12 +65,13 @@ before_install:
 
 install:
   - composer install --quiet --dev --prefer-dist --no-suggest
-  - ./vendor/bin/wp core download --path=/tmp/wp
+  - ./vendor/bin/wp core download --version=$WP_VERSION --path=/tmp/wp
+  - ./vendor/bin/wp theme install $WP_THEME --path=/tmp/wp
   - cp .env.default .env
   - bash -v tests/setup.sh
 
 before_script:
-  - /tmp/phantomjs-1.9.8-linux-x86_64/bin/phantomjs 2>&1 --webdriver=4444 &
+  - /tmp/phantomjs-1.9.8-linux-x86_64/bin/phantomjs --webdriver=4444 > /dev/null 2>&1 &
   - php -S localhost:8080 -t /tmp/wp > /dev/null 2>&1 &
 
 script:

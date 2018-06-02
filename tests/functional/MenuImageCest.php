@@ -2,9 +2,16 @@
 
 class MenuImageCest {
 	public function _before( FunctionalTester $I ) {
-		$I->useTheme( 'twentyseventeen' );
+		$theme = getenv('WP_THEME');
+		if (empty($theme)) {
+			$theme = 'twentyseventeen';
+		}
+		$I->useTheme( $theme );
 		// Need this to use core functions.
 		$I->bootstrapWp();
+		// Check if it theme have registered menus.
+		$menus = get_registered_nav_menus();
+		$I->assertNotEmpty($menus);
 	}
 
 	public function _after( FunctionalTester $I ) {
@@ -70,7 +77,8 @@ class MenuImageCest {
 	 */
 	public function testMenuImagesDisplay( FunctionalTester $I, \Codeception\Example $examples ) {
 		// Prepare menu, items and their values.
-		$I->haveMenuInDatabase( 'Navigation', 'top' );
+		$menus = get_registered_nav_menus();
+		$I->haveMenuInDatabase( 'Navigation', reset(array_keys($menus)) );
 		$item_id = $I->haveMenuItemInDatabase( 'Navigation', 'Test link' );
 		$thumbnail_id = $I->haveAttachmentInDatabase( codecept_data_dir( $examples[ 'thumbnail' ][ 0 ] ) );
 		$I->havePostmetaInDatabase( $item_id, '_thumbnail_id', $thumbnail_id );
