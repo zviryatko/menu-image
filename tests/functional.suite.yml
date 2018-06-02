@@ -10,6 +10,8 @@ modules:
         - WPWebDriver
         - WPFilesystem
         - Asserts
+        - WPCLI
+        - WPBootstrapper
     config:
         WPDb:
             dsn: 'mysql:host=%DB_HOST%;dbname=%DB_NAME%'
@@ -37,3 +39,8 @@ modules:
             mu-plugins: '/wp-content/mu-plugins'
             themes: '/wp-content/themes'
             uploads: '/wp-content/uploads'
+        WPCLI:
+            path: '%WP_ROOT_FOLDER%'
+            throw: true
+        WPBootstrapper:
+            wpRootFolder: '%WP_ROOT_FOLDER%'
