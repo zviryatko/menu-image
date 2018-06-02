@@ -33,18 +33,6 @@ env:
     - WP_VERSION=latest   WP_THEME=twentyseventeen
     - WP_VERSION=latest   WP_THEME=twentysixteen
     - WP_VERSION=latest   WP_THEME=twentyfifteen
-    - WP_VERSION=4.9      WP_THEME=twentyseventeen
-    - WP_VERSION=4.9      WP_THEME=twentysixteen
-    - WP_VERSION=4.9      WP_THEME=twentyfifteen
-    - WP_VERSION=4.8      WP_THEME=twentyseventeen
-    - WP_VERSION=4.8      WP_THEME=twentysixteen
-    - WP_VERSION=4.8      WP_THEME=twentyfifteen
-    - WP_VERSION=4.7      WP_THEME=twentyseventeen
-    - WP_VERSION=4.7      WP_THEME=twentysixteen
-    - WP_VERSION=4.7      WP_THEME=twentyfifteen
-    - WP_VERSION=4.6      WP_THEME=twentyseventeen
-    - WP_VERSION=4.6      WP_THEME=twentysixteen
-    - WP_VERSION=4.6      WP_THEME=twentyfifteen
 
 matrix:
   allow_failures:
