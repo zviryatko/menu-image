@@ -90,8 +90,8 @@ class MenuImageCest {
 		$I->seeElement("#menu-item-$item_id img", ['width' => $w, 'height' => $h]);
 		$thumb_id = get_post_meta($item_id, '_thumbnail_id', true);
 		$I->seeElement("#menu-item-$item_id img", ['src' => reset(wp_get_attachment_image_src($thumb_id, $examples[ 'image_size' ]))]);
-		$hover_id = get_post_meta($item_id, '_thumbnail_hover_id', true);
-		if (!empty($hover_id)) {
+		if (!empty($examples[ 'thumbnail' ][ 1 ])) {
+			$hover_id = get_post_meta($item_id, '_thumbnail_hover_id', true);
 			$I->seeElement("#menu-item-$item_id img", ['src' => reset(wp_get_attachment_image_src($hover_id, $examples[ 'image_size' ]))]);
 		}
 	}

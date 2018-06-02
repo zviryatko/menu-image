@@ -45,7 +45,7 @@ install:
 
 before_script:
   - /tmp/phantomjs-1.9.8-linux-x86_64/bin/phantomjs 2>&1 --webdriver=4444 &
-  - php -S localhost:8080 2>&1 -t /tmp/wp &
+  - php -S localhost:8080 -t /tmp/wp > /dev/null 2>&1 &
 
 script:
   - ./vendor/bin/codecept run
