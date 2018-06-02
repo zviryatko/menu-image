@@ -35,12 +35,12 @@ matrix:
 before_install:
   - export PATH="$TRAVIS_BUILD_DIR/vendor/bin:$PATH"
   - export PATH="$TRAVIS_BUILD_DIR/bin:$PATH"
-  - mysql -e 'CREATE DATABASE wordpress;'
   - wget -qO- https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2 | tar xj -C /tmp
 
 install:
   - composer install --quiet --dev --prefer-dist --no-suggest
   - ./vendor/bin/wp core download --path=/tmp/wp
+  - cp .env.default .env
   - bash -v tests/setup.sh
 
 before_script:
