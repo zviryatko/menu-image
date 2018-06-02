@@ -84,6 +84,7 @@ class Menu_Image_Plugin {
 		add_action( 'wp_update_nav_menu_item', array( $this, 'wp_update_nav_menu_item_action' ), 10, 2 );
 		add_action( 'admin_init', array( $this, 'admin_init' ), 99 );
 		add_filter( 'jetpack_photon_override_image_downsize', array( $this, 'jetpack_photon_override_image_downsize_filter' ), 10, 2 );
+		add_filter( 'wp_get_attachment_image_attributes', array($this, 'wp_get_attachment_image_attributes'), 99, 3 );
 	}
 
 	/**
@@ -338,16 +339,23 @@ class Menu_Image_Plugin {
 	}
 
 	/**
-	 * Replacement default menu item output.
+	 * Filters the HTML attributes applied to a menu item's anchor element.
 	 *
-	 * @param string $item_output Default item output
-	 * @param object $item        Menu item data object.
-	 * @param int    $depth       Depth of menu item. Used for padding.
-	 * @param object $args
+     * @param array $atts {
+	 *     The HTML attributes applied to the menu item's `<a>` element, empty strings are ignored.
+	 *
+	 *     @type string $title  Title attribute.
+	 *     @type string $target Target attribute.
+	 *     @type string $rel    The rel attribute.
+	 *     @type string $href   The href attribute.
+	 * }
+	 * @param WP_Post  $item  The current menu item.
+	 * @param stdClass $args  An object of wp_nav_menu() arguments.
+	 * @param int      $depth Depth of menu item. Used for padding.
 	 *
 	 * @return string
 	 */
-	public function menu_image_nav_menu_link_attributes_filter( $attributes, $item, $depth, $args ) {
+	public function menu_image_nav_menu_link_attributes_filter( $atts, $item, $args, $depth = null ) {
 		$position = $item->title_position ? $item->title_position : apply_filters( 'menu_image_default_title_position', 'after' );
 		$class    = ! empty( $attributes[ 'class' ] ) ? $attributes[ 'class' ] : '';
 		$class .= " menu-image-title-{$position}";
@@ -357,7 +365,7 @@ class Menu_Image_Plugin {
 			$class .= ' menu-image-not-hovered';
 		}
 		// Fix dropdown menu for Flatsome theme.
-		if ( ! empty( $args->walker ) && class_exists( 'FlatsomeNavDropdown' ) && $args->walker instanceof FlatsomeNavDropdown && $depth === 0 ) {
+		if ( ! empty( $args->walker ) && class_exists( 'FlatsomeNavDropdown' ) && $args->walker instanceof FlatsomeNavDropdown && ! is_null( $depth ) && $depth === 0 ) {
 			$class .= ' nav-top-link';
 		}
 		$attributes[ 'class' ] = $class;
@@ -653,7 +661,7 @@ class Menu_Image_Plugin {
 	 * @return bool
 	 */
 	public function jetpack_photon_override_image_downsize_filter( $prevent, $data ) {
-		return $this->isAttachmentUsed( $data[ 'size' ], $data[ 'attachment_id' ] );
+		return $this->isAttachmentUsed( $data[ 'attachment_id' ], $data[ 'size' ] );
 	}
 
 	/**
@@ -669,13 +677,42 @@ class Menu_Image_Plugin {
 	/**
 	 * Check if attachment is used in menu items.
 	 *
-	 * @param string $size
 	 * @param int    $id
+	 * @param string $size
 	 *
 	 * @return bool
 	 */
-	public function isAttachmentUsed( $size, $id ) {
-		return is_string($size) && isset( $this->used_attachments[ $size ] ) && in_array( $id, $this->used_attachments[ $size ] );
+	public function isAttachmentUsed( $id, $size = null ) {
+		if ( ! is_null( $size ) ) {
+			return is_string( $size ) && isset( $this->used_attachments[ $size ] ) && in_array( $id, $this->used_attachments[ $size ] );
+		} else {
+			foreach ( $this->used_attachments as $used_attachment ) {
+				if ( in_array( $id, $used_attachment ) ) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
+	/**
+	 * Filters the list of attachment image attributes.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param array        $attr       Attributes for the image markup.
+	 * @param WP_Post      $attachment Image attachment post.
+	 * @param string|array $size       Requested size. Image size or array of width and height values
+	 *                                 (in that order). Default 'thumbnail'.
+     *
+     * @return array Valid array of image attributes.
+	 */
+	public function wp_get_attachment_image_attributes( $attr, $attachment, $size ) {
+		if ( $this->isAttachmentUsed( $attachment->ID, $size ) ) {
+			unset( $attr['sizes'], $attr['srcset'] );
+		}
+
+		return $attr;
 	}
 }
 
