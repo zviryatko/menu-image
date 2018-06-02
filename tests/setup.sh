@@ -7,7 +7,7 @@ WP=${DIR}/vendor/bin/wp
 cd ${WP_ROOT_FOLDER}
 
 # Create database and drop previous one.
-mysql -u${DB_USER} $(if [ ! -z DB_PASSWORD ]; then echo "-p${DB_PASSWORD}"; fi)  -h${DB_HOST} -e "DROP DATABASE IF EXISTS ${DB_NAME}; CREATE DATABASE ${DB_NAME};"
+mysql -u${DB_USER} $(if [ ! -z ${DB_PASSWORD} ]; then echo "-p${DB_PASSWORD}"; fi)  -h${DB_HOST} -e "DROP DATABASE IF EXISTS ${DB_NAME}; CREATE DATABASE ${DB_NAME};"
 
 # Install and configure wordpress.
 ${WP} config create --dbname=${DB_NAME} --dbuser=${DB_USER} --dbhost=${DB_HOST} --dbprefix=${TABLE_PREFIX}
