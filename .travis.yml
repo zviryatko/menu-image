@@ -60,7 +60,6 @@ before_install:
 install:
   - composer install --quiet --dev --prefer-dist --no-suggest
   - ./vendor/bin/wp core download --version=$WP_VERSION --path=/tmp/wp
-  - ./vendor/bin/wp theme install $WP_THEME --path=/tmp/wp
   - cp .env.default .env
   - bash -v tests/setup.sh
 
